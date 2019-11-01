@@ -1,0 +1,327 @@
+<%= form_with(model: prod_plan_master, remote: true) do |f| %>
+  <div class="form-row"> 
+    <%= f.hidden_field :plant,:value => "1080", class: 'form-control form-control-sm'%> 
+    <div class="col-md-2 mb-2"> 
+      <label for="work_center">Machine #</label>
+
+      <%= f.text_field :work_center, :value => "MCH-1001", :maxlength => 10, class: 'form-control form-control-sm'%>  
+    </div>
+    <div class="col-md-2 mb-2">
+      <label for="uom">Uom</label>
+      <%= f.text_field :uom, :value => "M2", class: 'form-control form-control-sm'%> 
+
+    </div> 
+    <div class="col-md-2 mb-2">
+      <label for="re_order_per">Re-order %</label>
+      <%= f.number_field :re_order_per, :value => "20", :maxlength => 5, class: 'form-control form-control-sm', id: 'reOrderPer', :onblur=>"calculation()",:required => true  %> 
+    </div> 
+    <div class="col-md-2 mb-2">
+     <label for="no_of_hrs">No. of Hrs</label>
+     <%= f.text_field :no_of_hrs, :value => "5",  class: 'form-control form-control-sm', id: 'noOfHrs', :onblur=>"calculation()", :required => true%>      
+   </div> 
+
+  </div> 
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover" id="planMasterTable">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">SFG Dec. </th>
+          <th scope="col">Part #</th>
+          <th scope="col" class="text-right">Day Req. </th>
+          <th scope="col" class="text-right">Kanban Size</th>
+          <th scope="col" class="text-right">Frequency</th>
+          <th scope="col" class="text-right">Day Req. </th>
+          <th scope="col" class="text-right">Lot Size</th>
+          <th scope="col" class="text-right">Safety Stock</th>
+          <th scope="col" class="text-right">Max Stock</th>
+          <th scope="col" class="text-right">Re-order Pt</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% prod_plan_masters_list.each do |p| %>
+        <tr>
+
+          <td class="align-middle"><%= p.sfg_desc %></td> 
+          <td class="align-middle"><%= p.sfg_code %></td> 
+          <td class="text-right align-middle"><%= p.day_req_batch %></td> 
+          <td class="text-right align-middle"><%= p.kanban_size %></td> 
+          <td class="text-right align-middle"><%= p.frequency_day %></td> 
+          <td class="text-right align-middle"><%= p.day_req_kanban %></td> 
+          <td class="text-right align-middle"><%= p.lot_size %></td> 
+          <td class="text-right align-middle"><%= p.safety_stock %></td> 
+          <td class="text-right align-middle"><%= p.max_stock %></td> 
+          <td class="text-right align-middle"><%= p.re_order_point %></td> 
+          <td class="align-middle">
+           <!--  <%if (p.action_status == "Active") %> 
+               <input type="checkbox" data-value="Active" checked class="statusChk" id="<%=p.id%>"/>
+            <%else%>
+               <input type="checkbox" data-value="In-Active" class="statusChk" id="<%=p.id%>"/>
+            <%end%>  -->
+<%= link_to p.action_status, prod_plan_master_path(:id => p.id, :action_status => p.action_status), method: :put,remote: true %>
+ <span class="float-right">  <%= link_to "X", p, method: :delete, remote: true, data: { confirm: "Are you sure?" } %>
+            </span>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>  
+  <%= button_tag 'Add', onclick: "addRow()", type: 'button', :class => "btn btn-primary"%> 
+  <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%> 
+  <%= button_tag 'Save', onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%>  
+  <a href="/prod_plan_headers" id="new_folder" class="btn btn-primary">Submit</a> 
+
+  <%= button_tag 'Cancel', onclick: "removeRow()", type: 'button', :class => "btn btn-secondary"%>   
+
+  <% if prod_plan_master.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(prod_plan_master.errors.count, "error") %> prohibited this prod_plan_master from being saved:</h2>
+
+      <ul>
+        <% prod_plan_master.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %> 
+<% end %>   
+<script type="text/javascript">  
+
+  var trt_mst_list = <%= raw trt_mst.to_json %>;  
+
+  var options = {
+    data: trt_mst_list,
+    getValue: "mat_desc",
+    template: {
+      type: "description",
+      fields: {
+        description: "mat_code"
+      }
+    },
+    list: {
+      match: {
+        enabled: true
+      },
+      onSelectItemEvent: function() {
+        var value = $(".auto-form-control").getSelectedItemData().mat_code;
+        $("#sfg_code").val(value).trigger("change");
+      },
+      onHideListEvent: function() {
+        var value = $(".auto-form-control").val().length; 
+        if (value < 5) {$("#sfg_code").val("").trigger("change");}
+        }
+    },
+    theme: "plate-dark"
+  };  
+
+// $('.statusChk').click(function() {
+//   $this = $(this) 
+//         console.log($this.parent().find(".statusShow").html());
+//     console.log($this.attr('data-value')); 
+//     console.log($this.attr('id')); 
+//        if($this.checked){
+//             $.ajax({
+//                 type: "POST",
+//                 url: '/',
+//                 data: $(this).attr('id'),  
+//                 success: function(data) {
+//                     alert('it worked');
+//                     alert(data);
+//                     $('#container').html(data);
+//                 },
+//                  error: function() {
+//                     alert('it broke');
+//                 },
+//                 complete: function() {
+//                     alert('it completed');
+//                 }
+//             });
+
+//             }
+//       });
+
+  function removeRow() {
+    document.getElementById('newrow').remove();
+  }
+
+  function validation() {
+    var dayReqBatch = document.getElementById('dayReqBatch');
+    var kanbanSize = document.getElementById('kanbanSize');
+    var frequencyDay = document.getElementById('frequencyDay');
+    var noOfHrs = document.getElementById('noOfHrs');
+    var reOrderPer = document.getElementById('reOrderPer'); 
+
+    if (dayReqBatch == null ||  kanbanSize == null  || frequencyDay == null  || noOfHrs == null || reOrderPer == null) { 
+      return false;
+    }
+
+    return true;
+  }
+
+  function addRow() {
+    if(document.getElementById('newrow') !== null)
+      { return false;}
+
+    var tr = document.getElementById('newrow');
+
+    var empTab = document.getElementById('planMasterTable');
+    var rowCnt = empTab.rows.length;        // GET TABLE ROW COUNT.
+    var tr = empTab.insertRow(rowCnt);
+    tr.id = "newrow"   
+
+    var tdEle = document.createElement('td');   
+
+    var eleSelect = document.createElement('SELECT');
+    var option = document.createElement("option"); 
+    setAttributes(eleSelect, {"id":"action_status","class": "form-control form-control-sm","style":"width:90px", "name":"prod_plan_master[action_status]"}); 
+    option.text = "Active";
+    eleSelect.add(option); 
+    option = document.createElement("option");
+    option.text = "In-active";
+    eleSelect.add(option); 
+    td = tr.insertCell(tdEle);      
+    td.appendChild(eleSelect);  
+
+    var ele = document.createElement('input');
+    ele.readOnly = true;
+    setAttributes(ele, {"id":"reOrderPoint", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[re_order_point]"});
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);  
+
+    ele = document.createElement('input');
+    ele.readOnly = true;
+    setAttributes(ele, {"id":"maxStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[max_stock]"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele); 
+
+    ele = document.createElement('input');
+    ele.readOnly = true;
+    setAttributes(ele, {"id":"safetyStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[safety_stock]"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele);  
+
+    ele = document.createElement('input');
+    ele.readOnly = true;
+    setAttributes(ele, {"id":"lotSize", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[lot_size]"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele); 
+
+    
+    ele = document.createElement('input');
+    ele.readOnly = true;
+    setAttributes(ele, {"id":"dayReqKanban", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[day_req_kanban]"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele); 
+
+    ele = document.createElement('input');
+    setAttributes(ele, {"id":"frequencyDay", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_master[frequency_day]", "onblur":"return calculation()","required":"true"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele);  
+
+    ele = document.createElement('input');
+    setAttributes(ele, {"id":"kanbanSize", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_master[kanban_size]", "onblur":"return calculation()","required":"true"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele);  
+
+    ele = document.createElement('input');
+    setAttributes(ele, {"id":"dayReqBatch", "type": "number","value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_master[day_req_batch]", "onblur":"return calculation()","required":"true"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele);
+
+
+    ele = document.createElement('input');
+    ele.readOnly = true;
+    setAttributes(ele, {"id":"sfg_code", "value": "","class": "form-control form-control-sm", "name":"prod_plan_master[sfg_code]","style":"width:150px", "required":"true"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele);  
+
+    ele = document.createElement('input');
+    setAttributes(ele, {"id":"sfg_desc", "value": "","class": "auto-form-control form-control form-control-sm", "name":"prod_plan_master[sfg_desc]","style":"width:210px", "required":"true"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele);  
+
+    $(".auto-form-control").easyAutocomplete(options);
+
+  }
+
+  function setAttributes(el, attrs) {
+    for(var key in attrs) {
+      el.setAttribute(key, attrs[key]);
+    }
+  }
+
+  function calculation() {
+    var dayReqBatch = document.getElementById('dayReqBatch');
+    var kanbanSize = document.getElementById('kanbanSize');
+    var frequencyDay = document.getElementById('frequencyDay');
+    var noOfHrs = document.getElementById('noOfHrs');
+    var reOrderPer = document.getElementById('reOrderPer'); 
+
+    if (dayReqBatch == null ||  kanbanSize == null  || frequencyDay == null  || noOfHrs == null || reOrderPer == null) {
+      return false;
+    }
+    var dayReqBatchValue = parseInt(dayReqBatch.value);
+    var kanbanSizeValue = parseInt(kanbanSize.value);
+    var frequencyDayValue = parseInt(frequencyDay.value);
+    var noOfHrsValue = parseInt(noOfHrs.value);
+    var reOrderPerValue = parseInt(reOrderPer.value); 
+
+    if (isNaN(dayReqBatchValue) || dayReqBatchValue < 0 ||  isNaN(kanbanSizeValue) || kanbanSizeValue < 0 || isNaN(frequencyDayValue) || frequencyDayValue < 0 || isNaN(noOfHrsValue) || noOfHrsValue < 0 || isNaN(reOrderPerValue) || reOrderPerValue < 0) {
+     return false;
+   }
+
+   var dayReqKanban = calDayReqKanban(dayReqBatchValue, kanbanSizeValue);
+   document.getElementById('dayReqKanban').value = dayReqKanban; 
+
+   if (dayReqKanban == null || dayReqKanban < 0) {
+    return false;
+  }
+  var lotSize = calLotSize(dayReqKanban, frequencyDayValue);
+  document.getElementById('lotSize').value = lotSize; 
+
+  var safetyStock = calSafetyStock(dayReqKanban, noOfHrsValue);
+  document.getElementById('safetyStock').value = safetyStock;
+
+  if (lotSize == null || lotSize < 0) {
+    return false;
+  }
+  document.getElementById('maxStock').value = calMaxStock(lotSize, safetyStock);
+  document.getElementById('reOrderPoint').value = calReOrderPoint(safetyStock, reOrderPerValue, lotSize);;
+}
+
+function calDayReqKanban(dayReqBatch, kanbanSize) {  
+  dayReqKanban = Math.round(dayReqBatch / kanbanSize);
+  console.log(dayReqKanban);
+  return dayReqKanban > 0 ? dayReqKanban : 0;
+}
+
+function calLotSize(dayReqKanban, frequencyDay) {
+  kanbanSize = Math.round(dayReqKanban / frequencyDay); 
+  return kanbanSize > 0 ? kanbanSize : 0;
+}
+function calSafetyStock(dayReqKanban, noOfHrs) {
+  frequencyDay = Math.round(parseFloat(dayReqKanban / 24) * noOfHrs); 
+  return frequencyDay > 0 ? frequencyDay : 0;
+
+}
+function calMaxStock(lotSize, safetyStock) {
+  noOfHrs = Math.round(lotSize + safetyStock); 
+  return noOfHrs > 0 ? noOfHrs : 0;
+}
+function calReOrderPoint(safetyStock, reOrderPer, lotSize) {  
+  reOrderPer = Math.round(safetyStock * (parseFloat(parseFloat(reOrderPer/100) * lotSize))); 
+  return reOrderPer > 0 ? reOrderPer : 0;
+}
+
+</script>
+
+
+
+
+
+
+
+
+

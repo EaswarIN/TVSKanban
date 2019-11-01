@@ -1,0 +1,2 @@
+class MstMaterial < ApplicationRecord 
+end

@@ -1,0 +1,2 @@
+class ProdPlanHeader < ApplicationRecord
+end

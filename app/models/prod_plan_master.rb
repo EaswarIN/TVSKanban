@@ -1,0 +1,2 @@
+class ProdPlanMaster < ApplicationRecord
+end
