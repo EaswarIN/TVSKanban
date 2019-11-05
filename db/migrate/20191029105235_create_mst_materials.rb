@@ -8,8 +8,7 @@ class CreateMstMaterials < ActiveRecord::Migration[6.0]
         t.string :mat_uom, :limit => 5
         t.string :plant, :limit => 10
         t.string :str_loc, :limit => 40
-        t.string :prod_str_loc, :limit => 40
-
+        t.string :prod_str_loc, :limit => 40 
       t.timestamps
     end
   end

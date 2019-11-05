@@ -63,7 +63,12 @@
         <% prod_plan_masters_list.each do |p| %>
         <tr id="master_<%= p.id %>">
           <td class=" align-middle"><%= p.sfg_code %></td> 
-          <td class="  align-middle"><%= f.text_field :trt_code, :onclick => "getTRT(#{p.id})", 'data-toggle' => "modal", 'data-target' => "#trt_code_list", class: 'trt_code form-control form-control-sm'%> </td>  
+          <td class="  align-middle"><%= f.text_field :trt_code, 'data-toggle' => "modal", class: 'trt_code form-control form-control-sm','data-toggle' => "modal", 'data-target' => "#trt_master", 'data-id' => "#{p.id}", 'data-sfg-code' => "#{p.sfg_code}" %> </td>  
+        
+
+          <!-- <td class="  align-middle"><%= f.text_field :trt_code, :onclick => "getTRT(#{p.id})", 'data-toggle' => "modal", 'data-target' => "#trt_master", class: 'trt_code form-control form-control-sm'%> </td>   -->
+
+
           <td class="text-right align-middle"><%= p.day_req_batch %></td> 
           <td class="text-right align-middle"><%= p.re_order_point %></td> 
           <td class="text-right align-middle"><%= p.max_stock %></td> 
@@ -122,13 +127,13 @@
   <% end %> 
 <% end %> 
 
-<div class="modal fade" id="trt_code_list">
+<div class="modal fade" id="trt_master">
     <div class="modal-dialog modal-lg">
       <div class="modal-content ">
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
+          <h4 class="modal-title">TRT Master</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -148,20 +153,7 @@
           <th scope="col">Gauge</th>
         </tr>
       </thead> 
-      <tbody>
-        <%  i = 1 %>
-        <% trt_mst.each do |t| %>
-        <tr class="trtList" data-dismiss="modal">
-          <td class=" align-middle" id="trt_code"><%= t.trt_code %></td> 
-          <td class=" align-middle" id="sfg_code"><%= t.sfg_code %></td> 
-          <td class=" align-middle" id="vendor_name"><%= t.vendor_name %></td> 
-          <td class=" align-middle" id="fabric_code"><%= t.fabric_code %></td> 
-          <td class=" align-middle" id="comp_code"><%= t.comp_code %></td>  
-          <td class="text-right align-middle" id="gauge"><%= t.gauge %></td> 
-       <input type="hidden" id="seq_no" value="<%= i %>">
- <% i = i + 1 %>
-        </tr>
-        <% end %>
+      <tbody id="trttbody"> 
       </tbody>
 
     </table>
@@ -178,16 +170,41 @@
 
 <script type="text/javascript"> 
 
+
+
+ $('.trt_code').on('click',function(){
+      var sfgCode = $(this).attr('data-sfg-code');
+      var id = $(this).attr('data-id');
+      $("#master_id").val(id);  
+      // $('.modal-body').load(dataURL,function(){
+           // $('#trt_master').modal({show:true});
+      // });
+      $.ajax({
+        url: "trt_masters/"+sfgCode+".json",
+        dataType: 'json',
+        type: "GET",
+        success: function(data) { 
+        $("#trttbody").empty();
+        $("#trttbody").html("");
+
+          $.each(data, function(i, t) { 
+            console.log(i);
+            var seq = i + 1;
+            $('#trttbody').append('<tr class="trtList" data-dismiss="modal"><td class=" align-middle" id="trt_code">'+t.trt_code+'</td>  <td class=" align-middle" id="sfg_code">'+t.sfg_code+'</td><td class=" align-middle" id="vendor_name"> '+t.vendor_name +'</td> <td class=" align-middle" id="fabric_code">'+t.fabric_code +'</td> <td class=" align-middle" id="comp_code">'+t.comp_code +'</td>  <td class="text-right align-middle" id="gauge">'+t.gauge +'</td> <input type="hidden" id="seq_no" value="'+ seq +'"></tr>');
+          });
+        }
+      });
+  });  
+
+
 function getTRT(id){
   $("#master_id").val(id); 
 }
 
-$(".trtList").click(function(){
+$("#trttbody").on('click', '.trtList', function(){
   var id = "#master_" + $("#master_id").val(); 
   $(id).find(".trt_code").val($(this).find("#trt_code").text()); 
-  $(id).find(".sfg_sequence").val($(this).find("#seq_no").val()); 
-// $("#trt_code_list").hide();
-  $("#trt_code_list").modal('hide');
+  $(id).find(".sfg_sequence").val($(this).find("#seq_no").val());  
 });
 
 // function getTRT(){
@@ -200,28 +217,8 @@ $(".trtList").click(function(){
 //   });
 // }
 
-  var trt_mst_list = <%= raw trt_mst.to_json %>;  
 
-  var options = {
-    data: trt_mst_list,
-
-    getValue: "mat_code",
-
-    template: {
-      type: "description",
-      fields: {
-        description: "mat_desc"
-      }
-    },
-
-    list: {
-      match: {
-        enabled: true
-      }
-    },
-
-    theme: "plate-dark"
-  };  
+ 
 
   function changePoType(select, text_field) {
      var x = document.getElementById(select).value;  
@@ -325,6 +322,7 @@ $(".trtList").click(function(){
     td.appendChild(ele);  
 
     ele = document.createElement('input');
+    // setAttributes(ele, {"id":"trt_code", "type": "number", "class": "trt_code form-control form-control-sm text-right", "name":"prod_plan_header[trt_code]"});
     setAttributes(ele, {"id":"trt_code", "type": "number", "class": "form-control form-control-sm text-right", "name":"prod_plan_header[trt_code]","data-toggle":"modal","data-target":"#trt_code_list"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);
@@ -333,7 +331,6 @@ $(".trtList").click(function(){
     setAttributes(ele, {"id":"sfg_code", "value": "","class": "auto-form-control form-control form-control-sm", "name":"prod_plan_master[sfg_code]","style":"width:135px", "required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
-    $(".auto-form-control").easyAutocomplete(options);  
   }
 
   function setAttributes(el, attrs) {

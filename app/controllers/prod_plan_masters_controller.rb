@@ -5,7 +5,7 @@ class ProdPlanMastersController < ApplicationController
   # GET /prod_plan_masters.json
   def index
     @prod_plan_master = ProdPlanMaster.new
-    @prod_plan_masters_list = ProdPlanMaster.all.order(:id)
+    @prod_plan_masters_list = ProdPlanMaster.select(:id, :sfg_desc, :sfg_code, :day_req_batch, :kanban_size, :frequency_day, :day_req_kanban, :lot_size, :safety_stock, :max_stock, :re_order_point, :action_status).order(:id)
     @trt_mst = MstMaterial.select(:id, :mat_code, :mat_desc, :mat_type).where({ mat_uom: "M2" })
   end
 
@@ -15,8 +15,7 @@ class ProdPlanMastersController < ApplicationController
   end
 
   # GET /prod_plan_masters/new
-  def new
-    @prod_plan_master = ProdPlanMaster.new
+  def new 
   end
 
   # GET /prod_plan_masters/1/edit

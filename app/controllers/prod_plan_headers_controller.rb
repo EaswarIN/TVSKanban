@@ -9,7 +9,7 @@ class ProdPlanHeadersController < ApplicationController
     @prod_plan_headers_list = ProdPlanHeader.all
 
     @prod_plan_masters_list = ProdPlanMaster.all
-    @trt_mst = TrtMst.select(:trt_code, :sfg_code, :vendor_name,:fabric_code, :comp_code, :gauge).order('vendor_code, fabric_code, comp_code, gauge')
+    @trt_mst = TrtMst.select(:id, :trt_code, :sfg_code, :vendor_name,:fabric_code, :comp_code, :gauge).order('vendor_code, fabric_code, comp_code, gauge')
   end
 
   # GET /prod_plan_headers/1
