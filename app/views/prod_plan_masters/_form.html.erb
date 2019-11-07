@@ -73,7 +73,7 @@
   <%= button_tag 'Save', onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%>  
   <a href="/prod_plan_headers" id="new_folder" class="btn btn-primary">Submit</a> 
 
-  <%= button_tag 'Cancel', onclick: "removeRow()", type: 'button', :class => "btn btn-secondary"%>   
+  <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>   
 
   <% if prod_plan_master.errors.any? %>
     <div id="error_explanation">
@@ -87,64 +87,10 @@
     </div>
   <% end %> 
 <% end %>   
-<script type="text/javascript">  
-
-  var trt_mst_list = <%= raw trt_mst.to_json %>;  
-
-  var options = {
-    data: trt_mst_list,
-    getValue: "mat_desc",
-    template: {
-      type: "description",
-      fields: {
-        description: "mat_code"
-      }
-    },
-    list: {
-      match: {
-        enabled: true
-      },
-      onSelectItemEvent: function() {
-        var value = $(".auto-form-control").getSelectedItemData().mat_code;
-        $("#sfg_code").val(value).trigger("change");
-      },
-      onHideListEvent: function() {
-        var value = $(".auto-form-control").val().length; 
-        if (value < 5) {$("#sfg_code").val("").trigger("change");}
-        }
-    },
-    theme: "plate-dark"
-  };  
-
-// $('.statusChk').click(function() {
-//   $this = $(this) 
-//         console.log($this.parent().find(".statusShow").html());
-//     console.log($this.attr('data-value')); 
-//     console.log($this.attr('id')); 
-//        if($this.checked){
-//             $.ajax({
-//                 type: "POST",
-//                 url: '/',
-//                 data: $(this).attr('id'),  
-//                 success: function(data) {
-//                     alert('it worked');
-//                     alert(data);
-//                     $('#container').html(data);
-//                 },
-//                  error: function() {
-//                     alert('it broke');
-//                 },
-//                 complete: function() {
-//                     alert('it completed');
-//                 }
-//             });
-
-//             }
-//       });
-
-  function removeRow() {
-    document.getElementById('newrow').remove();
-  }
+<script type="text/javascript">   
+  $(".removeRow").on("click", function(){
+    $('#newrow').remove();
+  }); 
 
   function validation() {
     var dayReqBatch = document.getElementById('dayReqBatch');
@@ -153,16 +99,15 @@
     var noOfHrs = document.getElementById('noOfHrs');
     var reOrderPer = document.getElementById('reOrderPer'); 
 
-    if (dayReqBatch == null ||  kanbanSize == null  || frequencyDay == null  || noOfHrs == null || reOrderPer == null) { 
-      return false;
-    }
-
+    if (dayReqBatch == null ||  kanbanSize == null  || frequencyDay == null  || noOfHrs == null || reOrderPer == null) { return false; } 
     return true;
   }
 
   function addRow() {
     if(document.getElementById('newrow') !== null)
-      { return false;}
+      { return false ;}
+    
+    matrielAutocomplete();
 
     var tr = document.getElementById('newrow');
 
@@ -242,14 +187,11 @@
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
-    $(".auto-form-control").easyAutocomplete(options);
 
   }
 
   function setAttributes(el, attrs) {
-    for(var key in attrs) {
-      el.setAttribute(key, attrs[key]);
-    }
+    for(var key in attrs) { el.setAttribute(key, attrs[key]); }
   }
 
   function calculation() {
@@ -313,6 +255,34 @@ function calMaxStock(lotSize, safetyStock) {
 function calReOrderPoint(safetyStock, reOrderPer, lotSize) {  
   reOrderPer = Math.round(safetyStock * (parseFloat(parseFloat(reOrderPer/100) * lotSize))); 
   return reOrderPer > 0 ? reOrderPer : 0;
+}
+
+function matrielAutocomplete(){
+  $.ajax({
+    url: "material",
+    dataType: 'json',
+    type: "GET",
+    success: function(result) {  
+      var options = {
+        data: result,
+        getValue: "mat_desc",
+        template: { type: "description", fields: { description: "mat_code" } },
+        list: { match: { 
+          enabled: true },
+          onSelectItemEvent: function() {
+            var value = $(".auto-form-control").getSelectedItemData().mat_code;
+            $("#sfg_code").val(value).trigger("change");
+          },
+          onHideListEvent: function() {
+            var value = $(".auto-form-control").val().length; 
+            if (value < 5) {$("#sfg_code").val("").trigger("change");}
+          }
+        },
+        theme: "plate-dark"
+      }; 
+      $(".auto-form-control").easyAutocomplete(options); 
+    }
+  });
 }
 
 </script>

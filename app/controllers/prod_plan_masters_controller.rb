@@ -6,7 +6,7 @@ class ProdPlanMastersController < ApplicationController
   def index
     @prod_plan_master = ProdPlanMaster.new
     @prod_plan_masters_list = ProdPlanMaster.select(:id, :sfg_desc, :sfg_code, :day_req_batch, :kanban_size, :frequency_day, :day_req_kanban, :lot_size, :safety_stock, :max_stock, :re_order_point, :action_status).order(:id)
-    @trt_mst = MstMaterial.select(:id, :mat_code, :mat_desc, :mat_type).where({ mat_uom: "M2" })
+    @mst_material = MstMaterial.select(:id, :mat_code, :mat_desc, :mat_type).where({ mat_uom: "M2" })
   end
 
   # GET /prod_plan_masters/1

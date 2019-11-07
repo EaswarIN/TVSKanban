@@ -1,88 +1,104 @@
 <%= form_with(model: prod_plan_header, local: true) do |f| %>
-    <div class="form-row"> 
-      <%= f.hidden_field :plant,:value => "plan", class: 'form-control form-control-sm'%>   
-      <%= f.hidden_field :sfg_desc,:value => "sfg desc 1", class: 'form-control form-control-sm'%>  
-    <div class="col-md-2 mb-2"> 
-        <label for="work_center">Machine #</label>
+<div class="form-row"> 
+  <%= f.hidden_field :plant,:value => "plan", class: 'form-control form-control-sm'%>     
+  <div class="col-md-2 mb-2"> 
+    <label for="work_center">Machine #</label>
 
-      <%= f.text_field :work_center, :value => "MCH-1001", class: 'form-control form-control-sm'%>  
-    </div>
-    <div class="col-md-2 mb-2">
-      <label for="uom">Uom</label>
-        <%= f.text_field :uom, :value => "M2" , class: 'form-control form-control-sm'%> 
+    <%= f.text_field :work_center, :value => "MCH-1001", class: 'form-control form-control-sm'%>  
+  </div>
+  <div class="col-md-2 mb-2">
+    <label for="uom">Uom</label>
+    <%= f.text_field :sfg_uom, :value => "M2" , class: 'form-control form-control-sm'%> 
 
-    </div> 
-    <div class="col-md-2 mb-2">
-        <label for="Shift">Shift</label>
-         <select name="shift" class="form-control form-control-sm" style="width: 90px">
-              <option value="1">1</option>
-              <option value="2">2</option> 
-              <option value="3">3</option> 
-            </select> 
-    </div>  
   </div> 
+  <div class="col-md-2 mb-2">
+    <label for="Shift">Shift</label>
+    <select name="shift" class="form-control form-control-sm" style="width: 90px">
+      <option value="1">1</option>
+      <option value="2">2</option> 
+      <option value="3">3</option> 
+    </select> 
+  </div>  
+</div> 
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover" id="planHeaderTable">
-      <thead class="thead-light">
-        <tr>
-          <th scope="col">Part&nbsp;#</th>
-          <th scope="col">TRT&nbsp;#</th>
-          <th scope="col" class="text-right">Day&nbsp;Req. </th>
-          <th scope="col" class="text-right">Re-order&nbsp;Pt.</th>
-          <th scope="col" class="text-right">Max Stock</th>
-          <th scope="col" class="text-right">Safety Stock</th>
-          <th scope="col" class="text-right">Current Stock(DT)</th>
-          <th scope="col" class="text-right">Prod&nbsp;Qty</th>
-          <th scope="col" class="text-right">Sequence</th>
-          <th scope="col" class="text-right">Bom&nbsp;Type</th>
-          <th scope="col" class="text-right">PO&nbsp;Type</th>
-          <th scope="col" class="text-right">Schedule&nbsp;#</th>
-          <th scope="col">Sch.&nbsp;Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% prod_plan_headers_list.each do |p| %>
-        <tr id="header_<%= p.id %>">
-          <td class="align-middle"><%= p.sfg_code %>s</td> 
-          <td class=" align-middle"><%= p.trt_code %></td> 
-          <td class="text-right align-middle"><%= p.day_req_qty_m2 %></td> 
-          <td class="text-right align-middle"><%= p.re_order_point %></td> 
-          <td class="text-right align-middle"><%= p.max_stock %></td> 
-          <td class="text-right align-middle"><%= p.safety_stock %></td> 
-          <td class="text-right align-middle"><%= p.stock_qty %></td> 
-          <td class="text-right align-middle"><%= p.sfg_plan_qty %></td> 
-          <td class="text-right align-middle"><%= p.sfg_sequence %></td> 
-          <td class="text-right align-middle"><%= p.bom_type %></td> 
-          <td class="text-right align-middle"><%= p.po_type %>
-          <td class="text-right align-middle"><%= p.schedule_no %>
-          <td class="text-right align-middle"><%= p.schedule_status %>
-          <span><%= link_to "X", p, method: :delete, data: { confirm: "Are you sure?" } %> </span></td> 
-        </tr>
-    <% end %>
-        <% prod_plan_masters_list.each do |p| %>
-        <tr id="master_<%= p.id %>">
-          <td class=" align-middle"><%= p.sfg_code %></td> 
-          <td class="  align-middle"><%= f.text_field :trt_code, 'data-toggle' => "modal", class: 'trt_code form-control form-control-sm','data-toggle' => "modal", 'data-target' => "#trt_master", 'data-id' => "#{p.id}", 'data-sfg-code' => "#{p.sfg_code}" %> </td>  
-        
+<div class="table-responsive">
+  <table class="table table-bordered table-hover" id="planHeaderTable">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Part&nbsp;#</th>
+        <th scope="col">TRT&nbsp;#</th>
+        <th scope="col" class="text-right">Day&nbsp;Req. </th>
+        <th scope="col" class="text-right">Re-order&nbsp;Pt.</th>
+        <th scope="col" class="text-right">Max Stock</th>
+        <th scope="col" class="text-right">Safety Stock</th>
+        <th scope="col" class="text-right">Current Stock(DT)</th>
+        <th scope="col" class="text-right">Prod&nbsp;Qty</th>
+        <th scope="col" class="text-right">Sequence</th>
+        <th scope="col" class="text-right">Bom&nbsp;Type</th>
+        <th scope="col" class="text-right">PO&nbsp;Type</th>
+        <th scope="col" class="text-right">Schedule&nbsp;#</th>
+        <th scope="col">Sch.&nbsp;Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% prod_plan_headers_list.each do |p| %>
+      <tr id="header_<%= p.id %>">
+        <td class="align-middle"><%= p.sfg_code %></td> 
+        <td class=" align-middle"><%= p.trt_code %></td> 
+        <td class="text-right align-middle"><%= p.day_req_qty_m2 %></td> 
+        <td class="text-right align-middle"><%= p.reorder_point %></td> 
+        <td class="text-right align-middle"><%= p.max_stock %></td> 
+        <td class="text-right align-middle"><%= p.safety_stock %></td> 
+        <td class="text-right align-middle"><%= p.stock_qty %></td> 
+        <td class="text-right align-middle"><%= p.sfg_plan_qty %></td> 
+        <td class="text-right align-middle"><%= p.sfg_sequence %></td> 
+        <td class="text-right align-middle"><%= p.bom_type %></td> 
+        <td class="text-right align-middle"><%= p.po_type %>
+        <td class="text-right align-middle"><%= p.schedule_no %>
+    <td class=" align-middle"><%= p.schedule_status %> 
+ <span class="float-right">  <%= link_to "X", p, method: :delete, remote: true, data: { confirm: "Are you sure?" } %>
+            </span>
 
-          <!-- <td class="  align-middle"><%= f.text_field :trt_code, :onclick => "getTRT(#{p.id})", 'data-toggle' => "modal", 'data-target' => "#trt_master", class: 'trt_code form-control form-control-sm'%> </td>   -->
-
-
-          <td class="text-right align-middle"><%= p.day_req_batch %></td> 
-          <td class="text-right align-middle"><%= p.re_order_point %></td> 
-          <td class="text-right align-middle"><%= p.max_stock %></td> 
-          <td class="text-right align-middle">
-            <%= p.safety_stock %></td> 
-          <td>
-            <%= f.text_field :stock_qty, :value => "10", :type => "number",  class: 'form-control form-control-sm  text-right'%> </td>  
-          <td>
-            <% a = p.safety_stock - 10 %>
-            <%= f.text_field :sfg_plan_qty, :value => a,:readonly => true, class: 'form-control form-control-sm  text-right'%> 
           </td> 
-          <td class="text-right align-middle"><%= f.text_field :sfg_sequence,:readonly => true, :type => "number", class: 'sfg_sequence form-control form-control-sm text-right'%> </td> 
+    </tr>
+    <% end %>
+    <% prod_plan_masters_list.each do |p| %>
+    <tr id="master_<%= p.id %>" class="element-row">
+      <td class=" align-middle"> 
+        <%= p.sfg_code %> 
+  <%= f.hidden_field :sfg_code, :id =>"sfgCode", :value => p.sfg_code, name: "prod_plan_header[schedule][#{p.id}][sfg_code]"%>
+  <%= f.hidden_field :sfg_desc, :value => p.sfg_desc,  name: "prod_plan_header[schedule][#{p.id}][sfg_desc]"%> 
+      </td> 
+      <td class="align-middle"><%= f.text_field :trt_code, class: 'trt_code form-control form-control-sm','data-toggle' => "modal", 'data-target' => "#trt_master", 'data-id' => "#{p.id}", 'data-sfg-code' => "#{p.sfg_code}" , name: "prod_plan_header[schedule][#{p.id}][trt_code]", :required => true %> </td>  
+
+
+      <!-- <td class="  align-middle"><%= f.text_field :trt_code, 'data-toggle' => "modal", 'data-target' => "#trt_master", class: 'trt_code form-control form-control-sm'%> </td>   -->
+
+
+      <td class="text-right align-middle"><%= p.day_req_batch %>
+  <%= f.hidden_field :day_req_qty_m2, :value => p.day_req_batch,  name: "prod_plan_header[schedule][#{p.id}][day_req_qty_m2]"%> 
+        
+      </td> 
+      <td class="text-right align-middle"><%= p.re_order_point %>
+  <%= f.hidden_field :re_order_point, :value => p.re_order_point,  name: "prod_plan_header[schedule][#{p.id}][reorder_point]"%> 
+        
+      </td> 
+      <td class="text-right align-middle"><%= p.max_stock %>
+  <%= f.hidden_field :max_stock, :value => p.max_stock,  name: "prod_plan_header[schedule][#{p.id}][max_stock]"%> 
+        
+      </td> 
+      <td class="text-right align-middle"> 
+        <%= f.text_field :safety_stock, :type => "number", :value => p.safety_stock, class: 'form-control form-control-sm text-right safety-stock' , name: "prod_plan_header[schedule][#{p.id}][safety_stock]", :required => true,:readonly => true%> </td>  
+
+        <%=  %></td> 
+        <td>
+          <%= f.text_field :stock_qty, :type => "number", class: 'form-control form-control-sm  text-right stock-qty', name: "prod_plan_header[schedule][#{p.id}][stock_qty]", :required => true%> </td>  
+          <td> 
+            <%= f.text_field :sfg_plan_qty, :readonly => true, class: 'form-control form-control-sm text-right sfg-plan-qty', name: "prod_plan_header[schedule][#{p.id}][sfg_plan_qty]" %> 
+          </td> 
+          <td class="text-right align-middle"><%= f.text_field :sfg_sequence,:readonly => true, :type => "number", class: 'sfg_sequence form-control form-control-sm text-right', name: "prod_plan_header[schedule][#{p.id}][sfg_sequence]"%> </td> 
           <td>
-            <%= f.text_field :bom_type, :value => 'Green',:readonly => true, class: 'form-control form-control-sm'%> 
+            <%= f.text_field :bom_type, :value => 'Green',:readonly => true, class: 'form-control form-control-sm', name: "prod_plan_header[schedule][#{p.id}][bom_type]"%> 
 
             <!-- <select id="bom_type_<%= p.id %>" name="bom_type" class="form-control form-control-sm" style="width: 90px" onchange="changePoType('bom_type_<%= p.id %>', 'po_type_<%=p.id%>')">
               <option value="Green">Green</option>
@@ -91,46 +107,46 @@
             </select> -->
           </td>  
           <td> 
-            <%= f.text_field :po_type, :value => 'Trial',:readonly => true,   class: 'form-control form-control-sm'%>
+            <%= f.text_field :po_type, :value => 'Trial',:readonly => true,   class: 'form-control form-control-sm', name: "prod_plan_header[schedule][#{p.id}][po_type]"%>
           </td>  
-          <td class="text-right align-middle"><%= f.text_field :schedule_no,   class: 'form-control form-control-sm text-right'%> </td>  
+          <td class="text-right align-middle"><%= f.text_field :schedule_no,   class: 'form-control form-control-sm text-right', name: "prod_plan_header[schedule][#{p.id}][schedule_no]", :required => true%> </td>  
           <td>
-            <%= f.text_field :schedule_status, :value => 'Plan',:readonly => true,   class: 'form-control form-control-sm'%> 
+            <%= f.text_field :schedule_status, :value => 'Plan',:readonly => true,   class: 'form-control form-control-sm', name: "prod_plan_header[schedule][#{p.id}][schedule_status]", :required => true%> 
            <!--  <select name="schedule_status" class="form-control form-control-sm" style="width: 90px">
               <option value="WIP">WIP</option>
               <option value="Plan">Plan</option> 
             </select> -->
-              
-            </td> 
+
+          </td> 
         </tr>
-    <% end %>
+        <% end %>
       </tbody>
     </table>
   </div>  
   <%= button_tag 'Add', onclick: "addRow()", type: 'button', :class => "btn btn-primary"%>  
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%> 
   <%= button_tag 'Save', type: 'button', :class => "btn btn-primary"%> 
-  <%= button_tag 'Submit', type: 'button', :class => "btn btn-primary"%> 
-  <%= button_tag 'Cancel', onclick: "removeRow()", type: 'button', :class => "btn btn-secondary"%>  
+  <%= button_tag 'Submit', type: 'submit', :class => "btn btn-primary"%> 
+  <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>  
 
   
   <% if prod_plan_header.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(prod_plan_header.errors.count, "error") %> prohibited this prod_plan_header from being saved:</h2>
+  <div id="error_explanation">
+    <h2><%= pluralize(prod_plan_header.errors.count, "error") %> prohibited this prod_plan_header from being saved:</h2>
 
-      <ul>
-        <% prod_plan_header.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <ul>
+      <% prod_plan_header.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
   <% end %> 
-<% end %> 
+  <% end %> 
 
-<div class="modal fade" id="trt_master">
+  <div class="modal fade" id="trt_master">
     <div class="modal-dialog modal-lg">
       <div class="modal-content ">
-      
+
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">TRT Master</h4>
@@ -141,117 +157,94 @@
         <div class="modal-body">
 
           <table class="table table-bordered table-hover" id="trtMasterTable">
-      <thead class="thead-light">
-       <input type="hidden" id="master_id" value="">
-
-        <tr>
-          <th scope="col">TRT&nbsp;#</th>
-          <th scope="col">Part&nbsp;#</th>
-          <th scope="col">Vendor&nbsp;Name</th>
-          <th scope="col">Fabric&nbsp;Denier</th>
-          <th scope="col">Compound</th> 
-          <th scope="col">Gauge</th>
-        </tr>
-      </thead> 
-      <tbody id="trttbody"> 
-      </tbody>
-
-    </table>
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        
+            <thead class="thead-light">
+             <input type="hidden" id="master_id" value="">
+             <tr>
+              <th scope="col">TRT&nbsp;#</th>
+              <th scope="col">Part&nbsp;#</th>
+              <th scope="col">Vendor&nbsp;Name</th>
+              <th scope="col">Fabric&nbsp;Denier</th>
+              <th scope="col">Compound</th> 
+              <th scope="col">Gauge</th>
+            </tr>
+          </thead> 
+          <tbody id="trttbody"> 
+          </tbody>
+        </table>
       </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
     </div>
   </div>
+</div>
 
 <script type="text/javascript"> 
 
-
-
  $('.trt_code').on('click',function(){
-      var sfgCode = $(this).attr('data-sfg-code');
-      var id = $(this).attr('data-id');
-      $("#master_id").val(id);  
-      // $('.modal-body').load(dataURL,function(){
-           // $('#trt_master').modal({show:true});
-      // });
-      $.ajax({
-        url: "trt_masters/"+sfgCode+".json",
-        dataType: 'json',
-        type: "GET",
-        success: function(data) { 
-        $("#trttbody").empty();
-        $("#trttbody").html("");
+  $("#trttbody").empty();
+  $("#trttbody").html("");
+  var $this = $(this);
+  var sfgCode = $this.closest('.element-row').find('#sfgCode').val(); 
+  var id = $this.attr('data-id');
+  $("#master_id").val(id);   
+  $.ajax({
+    url: "trt_masters/"+sfgCode+".json",
+    dataType: 'json',
+    type: "GET",
+    success: function(data) { 
 
-          $.each(data, function(i, t) { 
-            console.log(i);
-            var seq = i + 1;
-            $('#trttbody').append('<tr class="trtList" data-dismiss="modal"><td class=" align-middle" id="trt_code">'+t.trt_code+'</td>  <td class=" align-middle" id="sfg_code">'+t.sfg_code+'</td><td class=" align-middle" id="vendor_name"> '+t.vendor_name +'</td> <td class=" align-middle" id="fabric_code">'+t.fabric_code +'</td> <td class=" align-middle" id="comp_code">'+t.comp_code +'</td>  <td class="text-right align-middle" id="gauge">'+t.gauge +'</td> <input type="hidden" id="seq_no" value="'+ seq +'"></tr>');
-          });
-        }
+      $.each(data, function(i, t) {  
+        var seq = i + 1;
+        $('#trttbody').append('<tr class="trtList" data-dismiss="modal"><td class=" align-middle" id="trt_code">'+t.trt_code+'</td>  <td class=" align-middle" id="sfg_code">'+t.sfg_code+'</td><td class=" align-middle" id="vendor_name"> '+t.vendor_name +'</td> <td class=" align-middle" id="fabric_code">'+t.fabric_code +'</td> <td class=" align-middle" id="comp_code">'+t.comp_code +'</td>  <td class="text-right align-middle" id="gauge">'+t.gauge +'</td> <input type="hidden" id="seq_no" value="'+ seq +'"></tr>');
       });
-  });  
+    }
+  });
+});   
 
-
-function getTRT(id){
-  $("#master_id").val(id); 
-}
-
-$("#trttbody").on('click', '.trtList', function(){
+ $("#trttbody").on('click', '.trtList', function(){
   var id = "#master_" + $("#master_id").val(); 
   $(id).find(".trt_code").val($(this).find("#trt_code").text()); 
   $(id).find(".sfg_sequence").val($(this).find("#seq_no").val());  
 });
 
-// function getTRT(){
-//   $.ajax({
-//     url: "prod_plan_masters/151.json",
-//     type: "GET",
-//     success: function(data) {
-//     console.log(data);
-//     }
-//   });
-// }
+ $(".removeRow").on("click", function(){
+  $('#newrow').remove();
+}); 
 
 
- 
 
-  function changePoType(select, text_field) {
-     var x = document.getElementById(select).value;  
-     if(x == 'Green'){
-    document.getElementById(text_field).value = "Trial";
+ $( ".stock-qty" ).blur(function() { 
+  var $this = $(this);
+  var stock_qty = $this.val();
+  var safety_stock = $this.closest('.element-row').find('.safety-stock').val();
+  var sfg_plan_qty = $this.closest('.element-row').find('.sfg-plan-qty');
+  sfg_plan_qty.val('');
+  if (parseInt(stock_qty) >= 0 ) {
+    sfg_plan_qty.val(parseInt(safety_stock) - parseInt(stock_qty));
+  } 
+}); 
 
-     }else{
-    document.getElementById(text_field).value = "Regular";
-
-     }
-  }
-
-
- function removeRow() {
-    document.getElementById('newrow').remove();
-  }
-
-  function addRow() {
-    if(document.getElementById('newrow') !== null)
+ function addRow() {
+  if(document.getElementById('newrow') !== null)
     { return false;}
 
-    var tr = document.getElementById('newrow');
-    
-    var empTab = document.getElementById('planHeaderTable');
+  var tr = document.getElementById('newrow');
+
+  var empTab = document.getElementById('planHeaderTable');
     var rowCnt = empTab.rows.length;        // GET TABLE ROW COUNT.
     var tr = empTab.insertRow(rowCnt);
     tr.id = "newrow"   
+    tr.className = "element-row"   
 
     var tdEle = document.createElement('td');   
 
     var eleSelect = document.createElement('SELECT');
     var option = document.createElement("option"); 
-    setAttributes(eleSelect, {"id":"action_status","class": "form-control form-control-sm","style":"width:90px", "name":"prod_plan_master[action_status]"}); 
+    setAttributes(eleSelect, {"id":"schedule_status","class": "form-control form-control-sm","style":"width:90px", "name":"prod_plan_master[schedule_status]"}); 
     option.text = "WIP";
     eleSelect.add(option); 
     option = document.createElement("option");
@@ -264,16 +257,16 @@ $("#trttbody").on('click', '.trtList', function(){
     setAttributes(ele, {"id":"schedule_no","type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule_no]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
- 
+
 
     var ele = document.createElement('input');
-    setAttributes(ele, {"id":"reOrderPoint", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[re_order_point]"});
+    setAttributes(ele, {"id":"po_type", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[po_type]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
 
     var eleSelect = document.createElement('SELECT');
     var option = document.createElement("option"); 
-    setAttributes(eleSelect, {"id":"action_status","class": "form-control form-control-sm text-right","style":"width:90px", "name":"prod_plan_master[action_status]"}); 
+    setAttributes(eleSelect, {"id":"bom_type","class": "form-control form-control-sm text-right","style":"width:90px", "name":"prod_plan_master[bom_type]"}); 
     option.text = "Green";
     eleSelect.add(option); 
     option = document.createElement("option");
@@ -285,13 +278,20 @@ $("#trttbody").on('click', '.trtList', function(){
     td = tr.insertCell(tdEle);      
     td.appendChild(eleSelect); 
 
+
     var ele = document.createElement('input');
-    setAttributes(ele, {"id":"reOrderPoint", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[re_order_point]"});
+    setAttributes(ele, {"id":"sfg_sequence", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_header[sfg_sequence]","required":"true"});
+    td = tr.insertCell(tdEle);      
+    td.appendChild(ele);  
+
+
+    ele = document.createElement('input');
+    setAttributes(ele, {"id":"sfg_plan_qty", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[sfg_plan_qty]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"maxStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[max_stock]"});
+    setAttributes(ele, {"id":"stock_qty", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[stock_qty]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
@@ -301,29 +301,23 @@ $("#trttbody").on('click', '.trtList', function(){
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"lotSize", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[lot_size]"});
+    setAttributes(ele, {"id":"max_stock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[max_stock]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
     
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"dayReqKanban", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[day_req_kanban]"});
+    setAttributes(ele, {"id":"re_order_point", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[re_order_point]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"frequencyDay", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_header[frequency_day]", "onblur":"return calculation()","required":"true"});
+    setAttributes(ele, {"id":"day_req_batch", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_header[day_req_batch]", "required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
-    ele = document.createElement('input');
-    setAttributes(ele, {"id":"kanbanSize", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_header[kanban_size]", "onblur":"return calculation()","required":"true"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
-
-    ele = document.createElement('input');
-    // setAttributes(ele, {"id":"trt_code", "type": "number", "class": "trt_code form-control form-control-sm text-right", "name":"prod_plan_header[trt_code]"});
-    setAttributes(ele, {"id":"trt_code", "type": "number", "class": "form-control form-control-sm text-right", "name":"prod_plan_header[trt_code]","data-toggle":"modal","data-target":"#trt_code_list"});
+    ele = document.createElement('input'); 
+    setAttributes(ele, {"id":"trt_code", "type": "number", "class": "form-control form-control-sm text-right", "name":"prod_plan_header[trt_code]","data-toggle":"modal","data-target":"#trt_master", "required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);
 
@@ -333,16 +327,22 @@ $("#trttbody").on('click', '.trtList', function(){
     td.appendChild(ele);  
   }
 
-  function setAttributes(el, attrs) {
-    for(var key in attrs) {
-      el.setAttribute(key, attrs[key]);
-    }
-  }
 
-  function calsProdQty() {
-  var dayReqBatch = document.getElementById('dayReqBatch');
-  var kanbanSize = document.getElementById('kanbanSize');
+  function changePoType(select, text_field) {
+   var x = document.getElementById(select).value;  
+   if(x == 'Green'){
+    document.getElementById(text_field).value = "Trial";
+  }else{
+    document.getElementById(text_field).value = "Regular";
+
+  }
 }
 
+
+function setAttributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
 
 </script> 

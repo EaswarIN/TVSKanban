@@ -5,4 +5,5 @@ Rails.application.routes.draw do
 	# For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html 
 
 	get '/trt_masters/:partid', to: 'trt#get_trt_by_part', as: 'trt_masters/'
+	get '/material', to: 'material#material_list', as: 'material/' 
 end 
