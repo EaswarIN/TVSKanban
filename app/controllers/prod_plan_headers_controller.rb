@@ -33,14 +33,17 @@ class ProdPlanHeadersController < ApplicationController
   # POST /prod_plan_headers
   # POST /prod_plan_headers.json
   def create 
-    prod_plan_header_params["schedule"].each do |k, r| 
-      ProdPlanHeader.create(plant: prod_plan_header_params["plant"], work_center: prod_plan_header_params["work_center"], sfg_uom: prod_plan_header_params["sfg_uom"], sfg_desc: r["sfg_desc"], sfg_code: r["sfg_code"], trt_code: r["trt_code"]  , day_req_qty_m2: r["day_req_qty_m2"], stock_qty: r["stock_qty"], sfg_plan_qty: r["sfg_plan_qty"], sfg_sequence: r["sfg_sequence"], bom_type: r["bom_type"], schedule_no: r["schedule_no"], schedule_status: r["schedule_status"], safety_stock: r["safety_stock"], max_stock: r["max_stock"], reorder_point: r["reorder_point"], action_status: r["action_status"], po_type: r["po_type"])
-    end
+    if !prod_plan_header_params["schedule"].blank?
+      prod_plan_header_params["schedule"].each do |k, r| 
+        ProdPlanHeader.create(plant: prod_plan_header_params["plant"], work_center: prod_plan_header_params["work_center"], sfg_uom: prod_plan_header_params["sfg_uom"], sfg_desc: r["sfg_desc"], sfg_code: r["sfg_code"], trt_code: r["trt_code"]  , day_req_qty_m2: r["day_req_qty_m2"], stock_qty: r["stock_qty"], sfg_plan_qty: r["sfg_plan_qty"], sfg_sequence: r["sfg_sequence"], bom_type: r["bom_type"], schedule_no: r["schedule_no"], schedule_status: r["schedule_status"], safety_stock: r["safety_stock"], max_stock: r["max_stock"], reorder_point: r["reorder_point"], action_status: r["action_status"], po_type: r["po_type"])
+      end
 
-    respond_to do |format|
-      format.html { redirect_to prod_plan_headers_url, notice: 'Prod plan header was successfully created.' }
-      format.json { head :no_content }
+      respond_to do |format|
+        format.html { redirect_to prod_plan_headers_url, notice: 'Prod plan header was successfully created.' }
+        format.json { head :no_content }
+      end
     end
+    
   end
 
   # PATCH/PUT /prod_plan_headers/1

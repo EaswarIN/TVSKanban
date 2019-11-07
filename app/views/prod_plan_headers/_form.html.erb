@@ -66,7 +66,7 @@
     <tr id="master_<%= p.id %>" class="element-row">
       <td class=" align-middle"> 
         <%= p.sfg_code %> 
-  <%= f.hidden_field :sfg_code, :id =>"sfgCode", :value => p.sfg_code, name: "prod_plan_header[schedule][#{p.id}][sfg_code]"%>
+  <%= f.hidden_field :sfg_code, :value => p.sfg_code, name: "prod_plan_header[schedule][#{p.id}][sfg_code]", id:"sfgCode"%>
   <%= f.hidden_field :sfg_desc, :value => p.sfg_desc,  name: "prod_plan_header[schedule][#{p.id}][sfg_desc]"%> 
       </td> 
       <td class="align-middle"><%= f.text_field :trt_code, class: 'trt_code form-control form-control-sm','data-toggle' => "modal", 'data-target' => "#trt_master", 'data-id' => "#{p.id}", 'data-sfg-code' => "#{p.sfg_code}" , name: "prod_plan_header[schedule][#{p.id}][trt_code]", :required => true %> </td>  
@@ -125,7 +125,7 @@
   </div>  
   <%= button_tag 'Add', onclick: "addRow()", type: 'button', :class => "btn btn-primary"%>  
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%> 
-  <%= button_tag 'Save', type: 'button', :class => "btn btn-primary"%> 
+  <%= button_tag 'Save', type: 'submit', :class => "btn btn-primary"%> 
   <%= button_tag 'Submit', type: 'submit', :class => "btn btn-primary"%> 
   <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>  
 
@@ -184,19 +184,18 @@
 
 <script type="text/javascript"> 
 
- $('.trt_code').on('click',function(){
-  $("#trttbody").empty();
-  $("#trttbody").html("");
+$(document).on('click', '.trt_code', function(){  
   var $this = $(this);
   var sfgCode = $this.closest('.element-row').find('#sfgCode').val(); 
-  var id = $this.attr('data-id');
+  var id = $this.attr('data-id'); 
   $("#master_id").val(id);   
   $.ajax({
     url: "trt_masters/"+sfgCode+".json",
     dataType: 'json',
     type: "GET",
     success: function(data) { 
-
+      $("#trttbody").empty();
+      $("#trttbody").html("");
       $.each(data, function(i, t) {  
         var seq = i + 1;
         $('#trttbody').append('<tr class="trtList" data-dismiss="modal"><td class=" align-middle" id="trt_code">'+t.trt_code+'</td>  <td class=" align-middle" id="sfg_code">'+t.sfg_code+'</td><td class=" align-middle" id="vendor_name"> '+t.vendor_name +'</td> <td class=" align-middle" id="fabric_code">'+t.fabric_code +'</td> <td class=" align-middle" id="comp_code">'+t.comp_code +'</td>  <td class="text-right align-middle" id="gauge">'+t.gauge +'</td> <input type="hidden" id="seq_no" value="'+ seq +'"></tr>');
@@ -212,7 +211,7 @@
 });
 
  $(".removeRow").on("click", function(){
-  $('#newrow').remove();
+  $('#master_new').remove();
 }); 
 
 
@@ -229,22 +228,23 @@
 }); 
 
  function addRow() {
-  if(document.getElementById('newrow') !== null)
+  if(document.getElementById('master_new') !== null)
     { return false;}
 
-  var tr = document.getElementById('newrow');
+    matrielAutocomplete();
+    var tr = document.getElementById('master_new');
 
-  var empTab = document.getElementById('planHeaderTable');
+    var empTab = document.getElementById('planHeaderTable');
     var rowCnt = empTab.rows.length;        // GET TABLE ROW COUNT.
     var tr = empTab.insertRow(rowCnt);
-    tr.id = "newrow"   
+    tr.id = "master_new"   
     tr.className = "element-row"   
 
     var tdEle = document.createElement('td');   
 
     var eleSelect = document.createElement('SELECT');
     var option = document.createElement("option"); 
-    setAttributes(eleSelect, {"id":"schedule_status","class": "form-control form-control-sm","style":"width:90px", "name":"prod_plan_master[schedule_status]"}); 
+    setAttributes(eleSelect, {"id":"schedule_status","class": "form-control form-control-sm","style":"width:90px", "name":"prod_plan_header[schedule][0][schedule_status]"}); 
     option.text = "WIP";
     eleSelect.add(option); 
     option = document.createElement("option");
@@ -254,19 +254,19 @@
     td.appendChild(eleSelect); 
 
     var ele = document.createElement('input');
-    setAttributes(ele, {"id":"schedule_no","type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule_no]"});
+    setAttributes(ele, {"id":"schedule_no","type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][schedule_no]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
 
 
     var ele = document.createElement('input');
-    setAttributes(ele, {"id":"po_type", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[po_type]"});
+    setAttributes(ele, {"id":"po_type", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][po_type]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
 
     var eleSelect = document.createElement('SELECT');
     var option = document.createElement("option"); 
-    setAttributes(eleSelect, {"id":"bom_type","class": "form-control form-control-sm text-right","style":"width:90px", "name":"prod_plan_master[bom_type]"}); 
+    setAttributes(eleSelect, {"id":"bom_type","class": "form-control form-control-sm text-right","style":"width:90px", "name":"prod_plan_header[schedule][0][bom_type]"}); 
     option.text = "Green";
     eleSelect.add(option); 
     option = document.createElement("option");
@@ -280,51 +280,56 @@
 
 
     var ele = document.createElement('input');
-    setAttributes(ele, {"id":"sfg_sequence", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_header[sfg_sequence]","required":"true"});
+    setAttributes(ele, {"type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][sfg_sequence]","required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"sfg_plan_qty", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[sfg_plan_qty]"});
+    setAttributes(ele, {"id":"sfg_plan_qty", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][sfg_plan_qty]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"stock_qty", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[stock_qty]"});
+    setAttributes(ele, {"id":"stock_qty", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][stock_qty]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"safetyStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[safety_stock]"});
+    setAttributes(ele, {"id":"safetyStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][safety_stock]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"max_stock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[max_stock]"});
+    setAttributes(ele, {"id":"max_stock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][max_stock]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
     
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"re_order_point", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[re_order_point]"});
+    setAttributes(ele, {"id":"reorder_point", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][reorder_point]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"day_req_batch", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_header[day_req_batch]", "required":"true"});
+    setAttributes(ele, {"id":"day_req_qty_m2", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][day_req_qty_m2]", "required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
     ele = document.createElement('input'); 
-    setAttributes(ele, {"id":"trt_code", "type": "number", "class": "form-control form-control-sm text-right", "name":"prod_plan_header[trt_code]","data-toggle":"modal","data-target":"#trt_master", "required":"true"});
+    setAttributes(ele, {"class": "trt_code form-control form-control-sm text-right", "data-id":"new", "name":"prod_plan_header[schedule][0][trt_code]","data-toggle":"modal","data-target":"#trt_master", "required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"sfg_code", "value": "","class": "auto-form-control form-control form-control-sm", "name":"prod_plan_master[sfg_code]","style":"width:135px", "required":"true"});
+    setAttributes(ele, {"id":"sfgCode",  "value": "","class": "auto-form-control form-control form-control-sm", "name":"prod_plan_header[schedule][0][sfg_code]","style":"width:135px", "required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
+
+    ele = document.createElement('input');
+    setAttributes(ele, {"id":"sfg_desc", "type": "hidden", "name":"prod_plan_header[schedule][0][sfg_desc]"}); 
+    td.appendChild(ele); 
+
   }
 
 
@@ -344,5 +349,31 @@ function setAttributes(el, attrs) {
     el.setAttribute(key, attrs[key]);
   }
 }
-
+function matrielAutocomplete(){
+  $.ajax({
+    url: "material",
+    dataType: 'json',
+    type: "GET",
+    success: function(result) {  
+      var options = {
+        data: result,
+        getValue: "mat_code",
+        template: { type: "description", fields: { description: "mat_desc" } },
+        list: { match: { 
+          enabled: true },
+          onSelectItemEvent: function() {
+            var value = $(".auto-form-control").getSelectedItemData().mat_desc;
+            $("#sfg_desc").val(value).trigger("change");
+          },
+          onHideListEvent: function() {
+            var value = $(".auto-form-control").val().length; 
+            if (value < 5) {$("#sfg_desc").val("").trigger("change");}
+          }
+        },
+        theme: "plate-dark"
+      }; 
+      $(".auto-form-control").easyAutocomplete(options); 
+    }
+  });
+}
 </script> 
