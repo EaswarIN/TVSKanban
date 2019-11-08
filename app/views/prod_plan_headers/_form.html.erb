@@ -46,7 +46,7 @@
         <td class="align-middle"><%= p.sfg_code %></td> 
         <td class=" align-middle"><%= p.trt_code %></td> 
         <td class="text-right align-middle"><%= p.day_req_qty_m2 %></td> 
-        <td class="text-right align-middle"><%= p.reorder_point %></td> 
+        <td class="text-right align-middle"><%= p.re_order_point %></td> 
         <td class="text-right align-middle"><%= p.max_stock %></td> 
         <td class="text-right align-middle"><%= p.safety_stock %></td> 
         <td class="text-right align-middle"><%= p.stock_qty %></td> 
@@ -80,7 +80,7 @@
         
       </td> 
       <td class="text-right align-middle"><%= p.re_order_point %>
-  <%= f.hidden_field :re_order_point, :value => p.re_order_point,  name: "prod_plan_header[schedule][#{p.id}][reorder_point]"%> 
+  <%= f.hidden_field :re_order_point, :value => p.re_order_point,  name: "prod_plan_header[schedule][#{p.id}][re_order_point]"%> 
         
       </td> 
       <td class="text-right align-middle"><%= p.max_stock %>
@@ -307,7 +307,7 @@ $(document).on('click', '.trt_code', function(){
 
     
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"reorder_point", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][reorder_point]"});
+    setAttributes(ele, {"id":"reorder_point", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][re_order_point]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
