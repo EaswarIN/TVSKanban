@@ -71,7 +71,7 @@
   <%= button_tag 'Add', onclick: "addRow()", type: 'button', :class => "btn btn-primary"%> 
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%> 
   <%= button_tag 'Save', onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%>  
-  <a href="/prod_plan_headers" id="new_folder" class="btn btn-primary">Submit</a> 
+  <%= button_tag 'Submit', onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%>   
 
   <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>   
 

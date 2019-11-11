@@ -6,7 +6,7 @@ class ProdPlanHeadersController < ApplicationController
   # GET /prod_plan_headers.json
   def index
     @prod_plan_header = ProdPlanHeader.new
-    @prod_plan_headers_list = ProdPlanHeader.all
+    @prod_plan_headers_list = ProdPlanHeader.select(:id, :trt_code, :sfg_code,:day_req_qty_m2, :re_order_point, :max_stock, :safety_stock, :stock_qty, :sfg_plan_qty, :sfg_sequence, :bom_type, :po_type, :schedule_no, :schedule_status).order(:sfg_sequence)
 
     # @prod_plan_masters_list = ProdPlanMaster.all
 
@@ -39,11 +39,11 @@ class ProdPlanHeadersController < ApplicationController
       end
 
       respond_to do |format|
+        ProdPlanHeader.update_sequence
         format.html { redirect_to prod_plan_headers_url, notice: 'Prod plan header was successfully created.' }
         format.json { head :no_content }
       end
-    end
-    
+    end 
   end
 
   # PATCH/PUT /prod_plan_headers/1
@@ -64,7 +64,10 @@ class ProdPlanHeadersController < ApplicationController
   # DELETE /prod_plan_headers/1.json
   def destroy
     @prod_plan_header.destroy
+    
     respond_to do |format|
+      ProdPlanHeader.update_sequence
+
       format.html { redirect_to prod_plan_headers_url, notice: 'Prod plan header was successfully destroyed.' }
       format.json { head :no_content }
     end
