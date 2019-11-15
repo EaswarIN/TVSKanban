@@ -98,13 +98,7 @@
           </td> 
           <td class="text-right align-middle"><%= f.text_field :sfg_sequence,:readonly => true, :type => "number", class: 'sfg_sequence form-control form-control-sm text-right', name: "prod_plan_header[schedule][#{p.id}][sfg_sequence]"%> </td> 
           <td>
-            <%= f.text_field :bom_type, :value => 'Green',:readonly => true, class: 'form-control form-control-sm', name: "prod_plan_header[schedule][#{p.id}][bom_type]"%> 
-
-            <!-- <select id="bom_type_<%= p.id %>" name="bom_type" class="form-control form-control-sm" style="width: 90px" onchange="changePoType('bom_type_<%= p.id %>', 'po_type_<%=p.id%>')">
-              <option value="Green">Green</option>
-              <option value="White">White</option> 
-              <option value="Yellow">Yellow</option> 
-            </select> -->
+            <%= f.text_field :bom_type, :value => 'Green',:readonly => true, class: 'form-control form-control-sm', name: "prod_plan_header[schedule][#{p.id}][bom_type]"%>  
           </td>  
           <td> 
             <%= f.text_field :po_type, :value => 'Trial',:readonly => true,   class: 'form-control form-control-sm', name: "prod_plan_header[schedule][#{p.id}][po_type]"%>
@@ -260,7 +254,7 @@ $(document).on('click', '.trt_code', function(){
 
 
     var ele = document.createElement('input');
-    setAttributes(ele, {"id":"po_type", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][po_type]"});
+    setAttributes(ele, {"id":"po_type", "class": "form-control form-control-sm text-right", "name":"prod_plan_header[schedule][0][po_type]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
 
@@ -332,6 +326,14 @@ $(document).on('click', '.trt_code', function(){
 
   }
 
+$(document).on('change', '#bom_type', function() {
+  var x = this.value;
+  if(x == 'Green'){
+    $(this).closest('.element-row').find('#po_type').val("Trial");
+  }else{
+    $(this).closest('.element-row').find('#po_type').val("Regular");
+  }
+});
 
   function changePoType(select, text_field) {
    var x = document.getElementById(select).value;  
