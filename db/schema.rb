@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_29_105235) do
+ActiveRecord::Schema.define(version: 2019_11_19_001007) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2019_10_29_105235) do
     t.string "sfg_uom", limit: 3, null: false
     t.string "trt_code", limit: 40, null: false
     t.decimal "day_req_qty_m2", precision: 12, scale: 3
-    t.decimal "reorder_point", precision: 12, scale: 3
+    t.decimal "re_order_point", precision: 12, scale: 3
     t.decimal "max_stock", precision: 12, scale: 3
     t.decimal "safety_stock", precision: 12, scale: 3
     t.decimal "stock_qty", precision: 12, scale: 3
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 2019_10_29_105235) do
     t.string "work_center", limit: 10, null: false
     t.integer "re_order_per"
     t.integer "no_of_hrs"
-    t.string "sfg_code", limit: 16, null: false
+    t.string "sfg_code", null: false
     t.string "sfg_desc", limit: 50, null: false
     t.integer "day_req_batch"
     t.integer "kanban_size"
@@ -80,6 +80,30 @@ ActiveRecord::Schema.define(version: 2019_10_29_105235) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "part_no"
+  end
+
+  create_table "trn_prod_plan_headers", force: :cascade do |t|
+    t.string "plant", limit: 4, null: false
+    t.string "plan_order_no", limit: 30
+    t.string "work_center", limit: 10, null: false
+    t.string "sfg_code", limit: 40, null: false
+    t.string "sfg_desc", limit: 40, null: false
+    t.string "sfg_uom", limit: 3, null: false
+    t.string "trt_code", limit: 40, null: false
+    t.decimal "day_req_qty_m2", precision: 12, scale: 3
+    t.decimal "re_order_point", precision: 12, scale: 3
+    t.decimal "max_stock", precision: 12, scale: 3
+    t.decimal "safety_stock", precision: 12, scale: 3
+    t.decimal "stock_qty", precision: 12, scale: 3
+    t.decimal "sfg_plan_qty", precision: 12, scale: 3
+    t.string "sfg_sequence", limit: 3
+    t.string "bom_type", limit: 10
+    t.string "po_type", limit: 10
+    t.string "schedule_no", limit: 10, null: false
+    t.string "schedule_status", limit: 10, null: false
+    t.string "action_status", default: "open"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "trt_msts", force: :cascade do |t|
