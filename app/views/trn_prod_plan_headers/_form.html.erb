@@ -69,7 +69,7 @@
   <%= f.hidden_field :sfg_code, :value => p.sfg_code, name: "trn_prod_plan_header[schedule][#{p.id}][sfg_code]", id:"sfgCode"%>
   <%= f.hidden_field :sfg_desc, :value => p.sfg_desc,  name: "trn_prod_plan_header[schedule][#{p.id}][sfg_desc]"%> 
       </td> 
-      <td class="align-middle"><%= f.text_field :trt_code, class: 'trt_code form-control form-control-sm','data-toggle' => "modal", 'data-target' => "#trt_master", 'data-id' => "#{p.id}", 'data-sfg-code' => "#{p.sfg_code}" , name: "trn_prod_plan_header[schedule][#{p.id}][trt_code]", :required => true %> </td>  
+      <td class="align-middle"><%= f.text_field :trt_code, class: 'trt_code form-control form-control-sm','data-toggle' => "modal", 'data-target' => "#trt_master", 'data-id' => "#{p.id}", 'data-sfg-code' => "#{p.sfg_code}" , name: "trn_prod_plan_header[schedule][#{p.id}][trt_code]", :autocomplete => :off, :required => true %> </td>  
 
 
       <!-- <td class="  align-middle"><%= f.text_field :trt_code, 'data-toggle' => "modal", 'data-target' => "#trt_master", class: 'trt_code form-control form-control-sm'%> </td>   -->
@@ -105,7 +105,7 @@
           </td>  
           <td class="text-right align-middle"><%= f.text_field :schedule_no,   class: 'form-control form-control-sm text-right', name: "trn_prod_plan_header[schedule][#{p.id}][schedule_no]", :required => true%> </td>  
           <td>
-            <%= f.text_field :schedule_status, :value => 'Plan',:readonly => true,   class: 'form-control form-control-sm', name: "trn_prod_plan_header[schedule][#{p.id}][schedule_status]", :required => true%> 
+            <%= f.text_field :schedule_status, :value => 'Plan',:readonly => true,   class: 'form-control form-control-sm', name: "trn_prod_plan_header[schedule][#{p.id}][schedule_status]",:autocomplete => :off, :required => true%> 
            <!--  <select name="schedule_status" class="form-control form-control-sm" style="width: 90px">
               <option value="WIP">WIP</option>
               <option value="Plan">Plan</option> 
