@@ -1,6 +1,7 @@
-<%= form_with(model: prod_plan_master, remote: true) do |f| %>
+<%= form_with(model: trn_prod_plan_master, remote: true) do |f| %>
   <div class="form-row"> 
     <%= f.hidden_field :plant,:value => "1080", class: 'form-control form-control-sm'%> 
+    <%= f.hidden_field :trt_width,:value => 1.4, class: 'form-control form-control-sm'%> 
     <div class="col-md-2 mb-2"> 
       <label for="work_center">Machine #</label>
 
@@ -29,7 +30,7 @@
           <th scope="col">TRT </th>
           <th scope="col">SFG Desc. </th>
           <th scope="col">Part #</th>
-          <th scope="col" class="text-right">Day Req. </th>
+          <th scope="col" class="text-right">Day Req.(M2) </th>
           <th scope="col" class="text-right">Kanban Size</th>
           <th scope="col" class="text-right">Frequency</th>
           <th scope="col" class="text-right">Day Req. </th>
@@ -37,12 +38,11 @@
           <th scope="col" class="text-right">Safety Stock</th>
           <th scope="col" class="text-right">Max Stock</th>
           <th scope="col" class="text-right">Re-order Pt</th>
-          <th scope="col">Status</th>
-          <th scope="col"> </th>
+          <th scope="col">Status</th> 
         </tr>
       </thead>
       <tbody>
-        <% prod_plan_masters_list.each do |p| %>
+        <% plan_masters_list.each do |p| %>
         <tr>
 
           <td class="align-middle"><%= p.trt_code %></td> 
@@ -56,16 +56,8 @@
           <td class="text-right align-middle"><%= p.safety_stock %></td> 
           <td class="text-right align-middle"><%= p.max_stock %></td> 
           <td class="text-right align-middle"><%= p.re_order_point %></td> 
-          <td class="align-middle">
-           <!--  <%if (p.action_status == "Active") %> 
-               <input type="checkbox" data-value="Active" checked class="statusChk" id="<%=p.id%>"/>
-            <%else%>
-               <input type="checkbox" data-value="In-Active" class="statusChk" id="<%=p.id%>"/>
-            <%end%>  -->
-<%= link_to p.action_status, prod_plan_master_path(:id => p.id, :action_status => p.action_status), method: :put,remote: true %> 
-          </td>
-          <td class="align-middle"><%= link_to "E", p, method: :delete, remote: true, data: { confirm: "Are you sure?" } %>
- <span class="float-right">  <%= link_to "X", p, method: :delete, remote: true, data: { confirm: "Are you sure?" } %>
+          <td class="align-middle"> 
+<%= link_to p.action_status, trn_prod_plan_master_path(:id => p.id, :action_status => p.action_status), method: :put,remote: true %>   <span class="float-right">  <%= link_to "X", p, method: :delete, remote: true, data: { confirm: "Are you sure?" } %>
 </td> 
         </tr>
         <% end %>
@@ -79,12 +71,12 @@
 
   <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>   
 
-  <% if prod_plan_master.errors.any? %>
+  <% if trn_prod_plan_master.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(prod_plan_master.errors.count, "error") %> prohibited this prod_plan_master from being saved:</h2>
+      <h2><%= pluralize(trn_prod_plan_master.errors.count, "error") %> prohibited this trn_prod_plan_master from being saved:</h2>
 
       <ul>
-        <% prod_plan_master.errors.full_messages.each do |message| %>
+        <% trn_prod_plan_master.errors.full_messages.each do |message| %>
         <li><%= message %></li>
         <% end %>
       </ul>
@@ -121,12 +113,11 @@
     tr.id = "newrow"   
 
     var tdEle = document.createElement('td');   
-
-    td = tr.insertCell(tdEle); 
+  
     
     var eleSelect = document.createElement('SELECT');
     var option = document.createElement("option"); 
-    setAttributes(eleSelect, {"id":"action_status","class": "form-control form-control-sm","style":"width:90px", "name":"prod_plan_master[action_status]"}); 
+    setAttributes(eleSelect, {"id":"action_status","class": "form-control form-control-sm","style":"width:90px", "name":"trn_prod_plan_master[action_status]"}); 
     option.text = "Active";
     eleSelect.add(option); 
     option = document.createElement("option");
@@ -137,65 +128,65 @@
 
     var ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"reOrderPoint", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[re_order_point]"});
+    setAttributes(ele, {"id":"reOrderPoint", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[re_order_point]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
 
     ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"maxStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[max_stock]"});
+    setAttributes(ele, {"id":"maxStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[max_stock]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
     ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"safetyStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[safety_stock]"});
+    setAttributes(ele, {"id":"safetyStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[safety_stock]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
     ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"lotSize", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[lot_size]"});
+    setAttributes(ele, {"id":"lotSize", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[lot_size]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
     
     ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"dayReqKanban", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"prod_plan_master[day_req_kanban]"});
+    setAttributes(ele, {"id":"dayReqKanban", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[day_req_kanban]"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele); 
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"frequencyDay", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_master[frequency_day]", "onblur":"return calculation()","required":"true"});
+    setAttributes(ele, {"id":"frequencyDay", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[frequency_day]", "onblur":"return calculation()","required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"kanbanSize", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_master[kanban_size]", "onblur":"return calculation()","required":"true"});
+    setAttributes(ele, {"id":"kanbanSize", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[kanban_size]", "onblur":"return calculation()","required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"dayReqBatch", "type": "number","value": "","class": "form-control form-control-sm text-right", "name":"prod_plan_master[day_req_batch]", "onblur":"return calculation()","required":"true"});
+    setAttributes(ele, {"id":"dayReqBatch", "type": "number","value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[day_req_batch]", "onblur":"return calculation()","required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);
 
 
     ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"sfg_code", "value": "","class": "form-control form-control-sm", "name":"prod_plan_master[sfg_code]","style":"width:150px", "required":"true"});
+    setAttributes(ele, {"id":"sfg_code", "value": "","class": "form-control form-control-sm", "name":"trn_prod_plan_master[sfg_code]","style":"width:150px", "required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
     ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"sfg_desc", "value": "","class": "auto-form-control form-control form-control-sm", "name":"prod_plan_master[sfg_desc]","style":"width:210px", "required":"true"});
+    setAttributes(ele, {"id":"sfg_desc", "value": "","class": "auto-form-control form-control form-control-sm", "name":"trn_prod_plan_master[sfg_desc]","style":"width:210px", "required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"trt_code", "value": "","class": "auto-form-control form-control form-control-sm", "name":"prod_plan_master[trt_code]", "required":"true"});
+    setAttributes(ele, {"id":"trt_code", "class": "auto-form-control form-control form-control-sm", "name":"trn_prod_plan_master[trt_code]", "required":"true"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 

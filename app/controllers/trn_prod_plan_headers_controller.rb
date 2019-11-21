@@ -10,8 +10,8 @@ class TrnProdPlanHeadersController < ApplicationController
 
     # @prod_plan_masters_list = ProdPlanMaster.all
 
-    @prod_plan_masters_list = ProdPlanMaster.all.joins("LEFT JOIN trn_prod_plan_headers ON prod_plan_masters.sfg_desc = trn_prod_plan_headers.sfg_desc")
-    .where(["trn_prod_plan_headers.sfg_desc is null and prod_plan_masters.action_status = ?", "Active"] )
+    @prod_plan_masters_list = TrnProdPlanMaster.all.joins("LEFT JOIN trn_prod_plan_headers ON trn_prod_plan_masters.sfg_desc = trn_prod_plan_headers.sfg_desc")
+    .where(["trn_prod_plan_headers.sfg_desc is null and trn_prod_plan_masters.action_status = ?", "Active"] )
 
     @trt_mst = TrtMst.select(:id, :trt_code, :sfg_code, :vendor_name,:fabric_code, :comp_code, :gauge).order('vendor_code, fabric_code, comp_code, gauge')
   end
