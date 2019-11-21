@@ -1,8 +1,7 @@
 class CreateTrnProdPlanMasters < ActiveRecord::Migration[6.0]
   def change
     create_table :trn_prod_plan_masters do |t|
-      	t.string :trt_code, :null => false
-      	t.decimal :trt_width, :precision => 7, :scale => 2
+      	t.string :trt_code, :null => false 
       	t.string :plant, :limit => 4, :null => false
 		t.string :work_center, :limit => 10, :null => false
 		t.integer :re_order_per

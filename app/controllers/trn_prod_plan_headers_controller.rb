@@ -6,12 +6,12 @@ class TrnProdPlanHeadersController < ApplicationController
   # GET /prod_plan_headers.json
   def index
     @prod_plan_header = TrnProdPlanHeader.new
-    @prod_plan_headers_list = TrnProdPlanHeader.select(:id, :trt_code, :sfg_code,:day_req_qty_m2, :re_order_point, :max_stock, :safety_stock, :stock_qty, :sfg_plan_qty, :sfg_sequence, :bom_type, :po_type, :schedule_no, :schedule_status).order(:sfg_sequence)
+    @prod_plan_headers_list = TrnProdPlanHeader.select(:id, :trt_code, :sfg_code,:sfg_desc,:day_req_qty_m2, :re_order_point, :max_stock, :safety_stock, :stock_qty, :sfg_plan_qty, :sfg_sequence, :bom_type, :po_type, :schedule_no, :schedule_status).order(:sfg_sequence)
 
     # @prod_plan_masters_list = ProdPlanMaster.all
 
-    @prod_plan_masters_list = TrnProdPlanMaster.all.joins("LEFT JOIN trn_prod_plan_headers ON trn_prod_plan_masters.sfg_desc = trn_prod_plan_headers.sfg_desc")
-    .where(["trn_prod_plan_headers.sfg_desc is null and trn_prod_plan_masters.action_status = ?", "Active"] )
+    @prod_plan_masters_list = TrnProdPlanMaster.all.joins("LEFT JOIN trn_prod_plan_headers ON trn_prod_plan_masters.trt_code = trn_prod_plan_headers.trt_code")
+    .where(["trn_prod_plan_headers.sfg_code is null and trn_prod_plan_masters.action_status = ?", "Active"] )
 
     @trt_mst = TrtMst.select(:id, :trt_code, :sfg_code, :vendor_name,:fabric_code, :comp_code, :gauge).order('vendor_code, fabric_code, comp_code, gauge')
   end
@@ -44,7 +44,7 @@ class TrnProdPlanHeadersController < ApplicationController
       end
 
       respond_to do |format|
-        TrnProdPlanHeader.update_sequence
+        # TrnProdPlanHeader.update_sequence
         format.html { redirect_to trn_prod_plan_headers_url, notice: 'Prod plan header was successfully created.' }
         format.json { head :no_content }
       end
@@ -71,7 +71,7 @@ class TrnProdPlanHeadersController < ApplicationController
     @prod_plan_header.destroy
     
     respond_to do |format|
-      TrnProdPlanHeader.update_sequence
+      # TrnProdPlanHeader.update_sequence
 
       format.html { redirect_to trn_prod_plan_headers_url, notice: 'Prod plan header was successfully destroyed.' }
       format.json { head :no_content }

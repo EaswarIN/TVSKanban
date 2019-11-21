@@ -3,7 +3,7 @@ class TrnProdPlanMastersController < ApplicationController
 
   def index
     @prod_plan_master = TrnProdPlanMaster.new
-    @prod_plan_masters_list = TrnProdPlanMaster.select(:id, :trt_code,:trt_width, :sfg_desc, :sfg_code, :day_req_batch, :kanban_size, :frequency_day, :day_req_kanban, :lot_size, :safety_stock, :max_stock, :re_order_point, :action_status).order(:id)
+    @prod_plan_masters_list = TrnProdPlanMaster.select(:id, :trt_code, :sfg_desc, :sfg_code, :day_req_batch, :kanban_size, :frequency_day, :day_req_kanban, :lot_size, :safety_stock, :max_stock, :re_order_point, :action_status).order(:id)
     @mst_material = MstMaterial.select(:id, :mat_code, :mat_desc, :mat_type).where({ mat_uom: "M2" })
   end
 
@@ -68,7 +68,7 @@ class TrnProdPlanMastersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def plan_master_params
      # params.fetch(:prod_plan_master, {})
-      params.require(:trn_prod_plan_master).permit(:plant, :work_center, :re_order_per, :no_of_hrs, :sfg_code, :sfg_desc, :day_req_batch, :kanban_size, :day_req_kanban, :frequency_day, :lot_size, :safety_stock, :max_stock, :re_order_point, :uom, :action_status, :trt_code, :trt_width)
+      params.require(:trn_prod_plan_master).permit(:plant, :work_center, :re_order_per, :no_of_hrs, :sfg_code, :sfg_desc, :day_req_batch, :kanban_size, :day_req_kanban, :frequency_day, :lot_size, :safety_stock, :max_stock, :re_order_point, :uom, :action_status, :trt_code)
 
     end
 end
