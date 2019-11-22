@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_21_054306) do
+ActiveRecord::Schema.define(version: 2019_11_22_071101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "mst_bom_hdrs", force: :cascade do |t|
+    t.string "plant", limit: 4, null: false
+    t.string "work_center", limit: 10, null: false
+    t.string "sfg_code", limit: 40, null: false
+    t.string "sfg_desc", limit: 40, null: false
+    t.string "sfg_uom", limit: 3, null: false
+    t.string "bom_type", limit: 10
+    t.integer "base_qty"
+    t.integer "alt_bom_no"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "mst_materials", force: :cascade do |t|
     t.string "mat_type", limit: 40
@@ -80,6 +93,20 @@ ActiveRecord::Schema.define(version: 2019_11_21_054306) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "part_no"
+  end
+
+  create_table "trn_planned_orders", force: :cascade do |t|
+    t.string "plant", limit: 4, null: false
+    t.string "plan_order_no", limit: 10, null: false
+    t.date "plan_order_dt"
+    t.string "work_center", limit: 10, null: false
+    t.string "sfg_code", limit: 40, null: false
+    t.string "sfg_desc", limit: 40, null: false
+    t.string "sfg_uom", limit: 3, null: false
+    t.integer "sfg_qty"
+    t.string "alt_bom_no"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "trn_prod_plan_headers", force: :cascade do |t|
