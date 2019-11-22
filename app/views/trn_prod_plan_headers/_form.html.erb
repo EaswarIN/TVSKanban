@@ -32,23 +32,21 @@
   <table class="table table-bordered table-hover" id="planHeaderTable">
     <thead class="thead-light">
       <tr>
-        <th scope="col">TRT&nbsp;#</th>
-        <th scope="col">Part&nbsp;#</th>
-        <th scope="col">SFG Desc.</th>
-        <th scope="col" class="text-right">Day&nbsp;Req. </th>
-        <th scope="col" class="text-right">RO&nbsp;Pt.</th>
+        <th scope="col" style="min-width: 100px">TRT No.</th>
+        <th scope="col" style="min-width: 100px">Part No.</th>
+        <th scope="col" style="min-width: 230px">SFG Desc.</th>
+        <th scope="col" class="text-right">Day Req. </th>
+        <th scope="col" class="text-right">RO Pt.</th>
         <th scope="col" class="text-right">Max Stk</th>
-        <th scope="col" class="text-right">Safety Stk</th>
-        <th scope="col" class="text-right">Cur. Stk(DT)</th>
+        <th scope="col" class="text-right">Sfty Stk</th>
+        <th scope="col" class="text-right">Cur. Stk</th>
         <th scope="col" class="text-right">Prod&nbsp;Qty</th>
         <th scope="col" class="text-right">Seq.</th>
-        <th scope="col" class="text-right">Bom&nbsp;Type</th>
-        <th scope="col" class="text-right">PO&nbsp;Type</th>
-        <th scope="col" class="text-right">Bom&nbsp;No.</th>
-
-        <th scope="col" class="text-right">PO&nbsp;No.</th>
-        <th scope="col" class="text-right">Sche.&nbsp;#</th>
-        <th scope="col">Sch.&nbsp;Status</th>
+        <th scope="col" class="text-right">Bom Type</th>
+        <th scope="col" class="text-right">PO Type</th> 
+        <th scope="col" class="text-right">PO No.</th>
+        <th scope="col" class="text-right">Sche. No.</th>
+        <th scope="col">Sch. Status</th>
       </tr>
     </thead>
     <tbody>
@@ -65,8 +63,7 @@
         <td class="text-right align-middle"><%= p.sfg_plan_qty %></td> 
         <td class="text-right align-middle"><%= p.sfg_sequence %></td> 
         <td class="align-middle"><%= p.bom_type %></td> 
-        <td class="text-right align-middle"><%= p.po_type %>
-        <td class="align-middle"><%= p.alt_bom_no %></td> 
+        <td class="text-right align-middle"><%= p.po_type %> 
         <td class="text-right align-middle"><%= p.sap_plan_order %>
         <td class="text-right align-middle"><%= p.schedule_no %>
     <td class=" align-middle"><%= p.schedule_status %> 
@@ -119,15 +116,13 @@
           </td> 
           <td class="text-right align-middle"><%= f.text_field :sfg_sequence,  :type => "number", class: 'sfg_sequence form-control form-control-sm text-right w40', name: "trn_prod_plan_header[schedule][#{p.id}][sfg_sequence]"%> </td> 
           <td class="align-middle">
-            <%= f.text_field :bom_type, :value => p.bom_type,  class: 'form-control form-control-sm', name: "trn_prod_plan_header[schedule][#{p.id}][bom_type]"%>  
+            <%= f.text_field :bom_type, :value => p.bom_type,  class: 'form-control form-control-sm w40', name: "trn_prod_plan_header[schedule][#{p.id}][bom_type]"%> 
+  <%= f.hidden_field :alt_bom_no, :value => p.alt_bom_no,  name: "trn_prod_plan_header[schedule][#{p.id}][alt_bom_no]"%>  
+
           </td>  
           <td class=" align-middle"> 
-            <%= f.text_field :po_type, :value => 'Trial',   class: 'form-control form-control-sm', name: "trn_prod_plan_header[schedule][#{p.id}][po_type]"%>
-          </td>  
-           <td class="text-right align-middle">
-              <%= p.alt_bom_no %>
-  <%= f.hidden_field :alt_bom_no, :value => p.alt_bom_no,  name: "trn_prod_plan_header[schedule][#{p.id}][alt_bom_no]"%>  
-</td>  
+            <%= f.text_field :po_type, :value => 'T',   class: 'form-control form-control-sm w40', name: "trn_prod_plan_header[schedule][#{p.id}][po_type]"%>
+          </td>   
           <td class="text-right align-middle">
             <%= p.sap_plan_order %>
   <%= f.hidden_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]"%>  
@@ -135,7 +130,8 @@
 
           <td class="text-right align-middle"><%= f.text_field :schedule_no,   class: 'form-control form-control-sm text-right w40', name: "trn_prod_plan_header[schedule][#{p.id}][schedule_no]", :required => true%> </td>  
           <td class=" align-middle">
-            <%= f.text_field :schedule_status, :value => 'Plan',:readonly => true,   class: 'form-control form-control-sm', name: "trn_prod_plan_header[schedule][#{p.id}][schedule_status]",:autocomplete => :off, :required => true%>  
+            Plan
+            <%= f.hidden_field :schedule_status, :value => 'Plan',  name: "trn_prod_plan_header[schedule][#{p.id}][schedule_status]"   %>  
 
           </td> 
         </tr>
@@ -284,27 +280,27 @@ $(document).on('click', '.trt_code1', function(){
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
 
-    ele = document.createElement('input');
-    setAttributes(ele, {"id":"alt_bom_no", "class": "form-control form-control-sm text-right", "name":"trn_prod_plan_header[schedule][0][alt_bom_no]"});
-    td = tr.insertCell(tdEle);
-    td.appendChild(ele);  
+    // ele = document.createElement('input');
+    // setAttributes(ele, {"id":"alt_bom_no", "class": "form-control form-control-sm text-right", "name":"trn_prod_plan_header[schedule][0][alt_bom_no]"});
+    // td = tr.insertCell(tdEle);
+    // td.appendChild(ele);  
  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"po_type", "class": "form-control form-control-sm text-right", "name":"trn_prod_plan_header[schedule][0][po_type]"});
+    setAttributes(ele, {"id":"po_type","value":"T", "class": "form-control form-control-sm w40", "name":"trn_prod_plan_header[schedule][0][po_type]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);   
 
     var eleSelect = document.createElement('SELECT');
     var option = document.createElement("option"); 
-    setAttributes(eleSelect, {"id":"bom_type","class": "form-control form-control-sm text-right","style":"width:90px", "name":"trn_prod_plan_header[schedule][0][bom_type]"}); 
-    option.text = "Green";
+    setAttributes(eleSelect, {"id":"bom_type","class": "form-control form-control-sm text-right","style":"width:50px", "name":"trn_prod_plan_header[schedule][0][bom_type]"}); 
+    option.text = "G";
     eleSelect.add(option); 
     option = document.createElement("option");
-    option.text = "White";
+    option.text = "W";
     eleSelect.add(option); 
     option = document.createElement("option");
-    option.text = "Yellow";
+    option.text = "Y";
     eleSelect.add(option); 
     td = tr.insertCell(tdEle);      
     td.appendChild(eleSelect); 
@@ -374,23 +370,13 @@ $(document).on('click', '.trt_code1', function(){
 
 $(document).on('change', '#bom_type', function() {
   var x = this.value;
-  if(x == 'Green'){
-    $(this).closest('.element-row').find('#po_type').val("Trial");
+  if(x == 'G'){
+    $(this).closest('.element-row').find('#po_type').val("T");
   }else{
-    $(this).closest('.element-row').find('#po_type').val("Regular");
+    $(this).closest('.element-row').find('#po_type').val("R");
   }
 });
-
-  function changePoType(select, text_field) {
-   var x = document.getElementById(select).value;  
-   if(x == 'Green'){
-    document.getElementById(text_field).value = "Trial";
-  }else{
-    document.getElementById(text_field).value = "Regular";
-
-  }
-}
-
+ 
 
 function setAttributes(el, attrs) {
   for(var key in attrs) {
