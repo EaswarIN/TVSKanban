@@ -1,0 +1,2 @@
+class TrnPlannedOrder < ApplicationRecord
+end

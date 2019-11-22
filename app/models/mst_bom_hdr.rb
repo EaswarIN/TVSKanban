@@ -1,0 +1,2 @@
+class MstBomHdr < ApplicationRecord
+end
