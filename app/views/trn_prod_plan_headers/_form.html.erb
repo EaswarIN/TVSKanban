@@ -1,6 +1,6 @@
 <%= form_with(model: trn_prod_plan_header, local: true) do |f| %>
 <div class="form-row"> 
-  <%= f.hidden_field :plant,:value => "p1", class: 'form-control form-control-sm'%>     
+  <%= f.hidden_field :plant,:value => "1080", class: 'form-control form-control-sm'%>     
   <div class="col-md-2 mb-2"> 
     <label for="work_center">Machine #</label>
 
@@ -43,9 +43,9 @@
         <th scope="col" class="text-right">Prod&nbsp;Qty</th>
         <th scope="col" class="text-right">Seq.</th>
         <th scope="col" class="text-right">Bom&nbsp;Type</th>
+        <th scope="col" class="text-right">PO&nbsp;Type</th>
         <th scope="col" class="text-right">Bom&nbsp;No.</th>
 
-        <th scope="col" class="text-right">PO&nbsp;Type</th>
         <th scope="col" class="text-right">PO&nbsp;No.</th>
         <th scope="col" class="text-right">Sche.&nbsp;#</th>
         <th scope="col">Sch.&nbsp;Status</th>
@@ -65,8 +65,8 @@
         <td class="text-right align-middle"><%= p.sfg_plan_qty %></td> 
         <td class="text-right align-middle"><%= p.sfg_sequence %></td> 
         <td class="align-middle"><%= p.bom_type %></td> 
-        <td class="align-middle"><%= p.alt_bom_no %></td> 
         <td class="text-right align-middle"><%= p.po_type %>
+        <td class="align-middle"><%= p.alt_bom_no %></td> 
         <td class="text-right align-middle"><%= p.sap_plan_order %>
         <td class="text-right align-middle"><%= p.schedule_no %>
     <td class=" align-middle"><%= p.schedule_status %> 
@@ -110,9 +110,8 @@
         
       </td> 
       <td class="text-right align-middle"> 
-        <%= f.text_field :safety_stock, :type => "number", :value => p.safety_stock, class: 'form-control form-control-sm text-right safety-stock w40' , name: "trn_prod_plan_header[schedule][#{p.id}][safety_stock]", :required => true,:readonly => true%> </td>  
+        <%= f.text_field :safety_stock, :type => "number", :value => p.safety_stock, class: 'form-control form-control-sm text-right safety-stock w40' , name: "trn_prod_plan_header[schedule][#{p.id}][safety_stock]", :required => true,:readonly => true%> </td>   
 
-        <%=  %></td> 
         <td class="text-right align-middle">
           <%= f.text_field :stock_qty, :type => "number", class: 'form-control form-control-sm  text-right stock-qty w40', name: "trn_prod_plan_header[schedule][#{p.id}][stock_qty]", :required => true%> </td>  
           <td class="text-right align-middle"> 
@@ -122,11 +121,17 @@
           <td class="align-middle">
             <%= f.text_field :bom_type, :value => p.bom_type,  class: 'form-control form-control-sm', name: "trn_prod_plan_header[schedule][#{p.id}][bom_type]"%>  
           </td>  
-           <td class="text-right align-middle"><%= f.text_field :alt_bom_no, :value => p.alt_bom_no,   class: 'form-control form-control-sm text-right w40', name: "trn_prod_plan_header[schedule][#{p.id}][alt_bom_no]", :required => true%> </td>  
           <td class=" align-middle"> 
             <%= f.text_field :po_type, :value => 'Trial',   class: 'form-control form-control-sm', name: "trn_prod_plan_header[schedule][#{p.id}][po_type]"%>
           </td>  
-          <td class="text-right align-middle"><%= f.text_field :sap_plan_order, :value => p.sap_plan_order,   class: 'form-control form-control-sm text-right w40', name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]", :required => true%> </td> 
+           <td class="text-right align-middle">
+              <%= p.alt_bom_no %>
+  <%= f.hidden_field :alt_bom_no, :value => p.alt_bom_no,  name: "trn_prod_plan_header[schedule][#{p.id}][alt_bom_no]"%>  
+</td>  
+          <td class="text-right align-middle">
+            <%= p.sap_plan_order %>
+  <%= f.hidden_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]"%>  
+          </td> 
 
           <td class="text-right align-middle"><%= f.text_field :schedule_no,   class: 'form-control form-control-sm text-right w40', name: "trn_prod_plan_header[schedule][#{p.id}][schedule_no]", :required => true%> </td>  
           <td class=" align-middle">
@@ -280,15 +285,15 @@ $(document).on('click', '.trt_code1', function(){
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"po_type", "class": "form-control form-control-sm text-right", "name":"trn_prod_plan_header[schedule][0][po_type]"});
-    td = tr.insertCell(tdEle);
-    td.appendChild(ele);    
-
-    ele = document.createElement('input');
     setAttributes(ele, {"id":"alt_bom_no", "class": "form-control form-control-sm text-right", "name":"trn_prod_plan_header[schedule][0][alt_bom_no]"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
-    
+ 
+
+    ele = document.createElement('input');
+    setAttributes(ele, {"id":"po_type", "class": "form-control form-control-sm text-right", "name":"trn_prod_plan_header[schedule][0][po_type]"});
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);   
 
     var eleSelect = document.createElement('SELECT');
     var option = document.createElement("option"); 
