@@ -13,7 +13,7 @@ class TrnProdPlanHeadersController < ApplicationController
     @prod_plan_masters_list = TrnProdPlanMaster.select("trn_prod_plan_masters.*, o.plan_order_no as sap_plan_order, bh.alt_bom_no, bh.bom_type")
     .joins("LEFT JOIN trn_prod_plan_headers h ON trn_prod_plan_masters.trt_code = h.trt_code")
     .joins("LEFT JOIN trn_planned_orders o ON o.sfg_code = trn_prod_plan_masters.sfg_code and trn_prod_plan_masters.plant = o.plant and o.plan_order_dt = current_date")
-    .joins("INNER JOIN mst_bom_hdrs bh ON o.sfg_code = bh.sfg_code and o.alt_bom_no = bh.alt_bom_no")
+    .joins("FULL OUTER JOIN mst_bom_hdrs bh ON o.sfg_code = bh.sfg_code and o.alt_bom_no = bh.alt_bom_no")
     .where(["h.sfg_code is null and trn_prod_plan_masters.action_status = ?", "Active"] )
 
     puts @prod_plan_masters_list.to_json
