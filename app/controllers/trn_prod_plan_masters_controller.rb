@@ -4,7 +4,7 @@ class TrnProdPlanMastersController < ApplicationController
   def index
     @prod_plan_master = TrnProdPlanMaster.new
     @prod_plan_masters_list = TrnProdPlanMaster.select(:id, :trt_code, :sfg_desc, :sfg_code, :day_req_batch, :kanban_size, :frequency_day, :day_req_kanban, :lot_size, :safety_stock, :max_stock, :re_order_point, :action_status).order(:id)
-    @mst_material = MstMaterial.select(:id, :mat_code, :mat_desc, :mat_type).where({ mat_uom: "M2" })
+    @mst_material = MstMaterial.select(:id, :mat_code, :mat_desc, :mat_type).where({ mat_uom: "M" })
   end
 
   # GET /prod_plan_masters/1
@@ -26,7 +26,7 @@ class TrnProdPlanMastersController < ApplicationController
     @prod_plan_master = TrnProdPlanMaster.new(plan_master_params) 
     respond_to do |format|
       if @prod_plan_master.save
-        format.html { redirect_to trn_prod_plan_masters_url, notice: 'Prod plan master was successfully created.' }
+        format.html { redirect_to trn_prod_plan_masters_url, success: 'Plan master was successfully created.' }
         format.json { render :index, status: :created, location: @prod_plan_master }
       else
         format.html { render :new }
@@ -44,7 +44,7 @@ class TrnProdPlanMastersController < ApplicationController
     @prod_plan_master.update_column(:action_status, status)
 
     respond_to do |format| 
-        format.html { redirect_to trn_prod_plan_masters_url, notice: 'Prod plan master was successfully updated.' }
+        format.html { redirect_to trn_prod_plan_masters_url, info: 'Plan master was successfully updated as ' + status }
         format.json { render :index, status: :ok, location: @prod_plan_master } 
     end
   end
@@ -54,7 +54,7 @@ class TrnProdPlanMastersController < ApplicationController
   def destroy
     @prod_plan_master.destroy
     respond_to do |format|
-      format.html { redirect_to trn_prod_plan_masters_url, notice: 'Prod plan master was successfully destroyed.' }
+      format.html { redirect_to trn_prod_plan_masters_url, success: 'Plan master was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

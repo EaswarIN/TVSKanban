@@ -16,7 +16,7 @@ class TrtController < ApplicationController
 	    @trt = TrtMst.select("trt_msts.trt_code, m.id, m.mat_code, m.mat_desc, m.mat_type ")
 	    .joins("INNER JOIN mst_materials m ON trt_msts.sfg_code = m.mat_code")
 		.joins("LEFT JOIN trn_prod_plan_masters p ON p.sfg_desc = m.mat_desc")
-		.where(["trt_msts.sfg_desc = m.mat_desc and m.mat_uom = ? and p.sfg_desc is null", "M2"])
+		.where(["trt_msts.sfg_desc = m.mat_desc and m.mat_uom = ? and p.sfg_desc is null", "M"])
 
 		respond_to do |format| 
 	        format.html  

@@ -10,9 +10,11 @@ class TrnProdPlanHeadersController < ApplicationController
 
     # @prod_plan_masters_list = ProdPlanMaster.all
 
-    @prod_plan_masters_list = TrnProdPlanMaster.select("trn_prod_plan_masters.*, o.plan_order_no as sap_plan_order, bh.alt_bom_no, bh.bom_type")
+    @prod_plan_masters_list = TrnProdPlanMaster.select("trn_prod_plan_masters.*, o.plan_order_no as sap_plan_order, bh.alt_bom_no, bh.bom_type, ss.stock_qty,trt.width")
     .joins("LEFT JOIN trn_prod_plan_headers h ON trn_prod_plan_masters.trt_code = h.trt_code")
     .joins("LEFT JOIN trn_planned_orders o ON o.sfg_code = trn_prod_plan_masters.sfg_code and trn_prod_plan_masters.plant = o.plant and o.plan_order_dt = current_date")
+    .joins("LEFT JOIN trn_sfg_stocks ss ON ss.trt_code = trn_prod_plan_masters.trt_code")
+    .joins("LEFT JOIN trt_msts trt ON trt.trt_code = ss.trt_code")
     .joins("FULL OUTER JOIN mst_bom_hdrs bh ON o.sfg_code = bh.sfg_code and o.alt_bom_no = bh.alt_bom_no")
     .where(["h.sfg_code is null and trn_prod_plan_masters.action_status = ?", "Active"] )
 
@@ -49,7 +51,7 @@ class TrnProdPlanHeadersController < ApplicationController
 
       respond_to do |format|
         # TrnProdPlanHeader.update_sequence
-        format.html { redirect_to trn_prod_plan_headers_url, notice: 'Prod plan header was successfully created.' }
+        format.html { redirect_to trn_prod_plan_headers_url, success: 'Prod plan header was successfully created.' }
         format.json { head :no_content }
       end
     end 
@@ -60,7 +62,7 @@ class TrnProdPlanHeadersController < ApplicationController
   def update
     respond_to do |format|
       if @prod_plan_header.update(prod_plan_header_params)
-        format.html { redirect_to @prod_plan_header, notice: 'Prod plan header was successfully updated.' }
+        format.html { redirect_to @prod_plan_header, success: 'Prod plan header was successfully updated.' }
         format.json { render :show, status: :ok, location: @prod_plan_header }
       else
         format.html { render :edit }
@@ -77,7 +79,7 @@ class TrnProdPlanHeadersController < ApplicationController
     respond_to do |format|
       # TrnProdPlanHeader.update_sequence
 
-      format.html { redirect_to trn_prod_plan_headers_url, notice: 'Prod plan header was successfully destroyed.' }
+      format.html { redirect_to trn_prod_plan_headers_url, success: 'Prod plan header was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

@@ -8,16 +8,16 @@
     </div>
     <div class="col-md-2 mb-2">
       <label for="uom">Uom</label>
-      <%= f.text_field :uom, :value => "M2", class: 'form-control form-control-sm'%> 
+      <%= f.text_field :uom, :value => "M", class: 'form-control form-control-sm'%> 
 
     </div> 
     <div class="col-md-2 mb-2">
       <label for="re_order_per">Re-order %</label>
-      <%= f.number_field :re_order_per, :value => "20", :maxlength => 5, class: 'form-control form-control-sm', id: 'reOrderPer', :onblur=>"calculation()",:required => true  %> 
+      <%= f.number_field :re_order_per, :value => "20", :maxlength => 5, class: 'form-control form-control-sm', id: 'reOrderPer', :onblur=>"calculation()",:required => true, :min => 0%> 
     </div> 
     <div class="col-md-2 mb-2">
      <label for="no_of_hrs">No. of Hrs</label>
-     <%= f.text_field :no_of_hrs, :value => "5",  class: 'form-control form-control-sm', id: 'noOfHrs', :onblur=>"calculation()", :required => true%>      
+     <%= f.text_field :no_of_hrs, :value => "5",  class: 'form-control form-control-sm', id: 'noOfHrs', :onblur=>"calculation()", :required => true, :min => 0%>      
    </div> 
 
   </div> 
@@ -82,10 +82,7 @@
     </div>
   <% end %> 
 <% end %>   
-<script type="text/javascript">   
-  $(".removeRow").on("click", function(){
-    $('#newrow').remove();
-  }); 
+<script type="text/javascript"> 
 
   function validation() {
     var dayReqBatch = document.getElementById('dayReqBatch');
@@ -157,17 +154,17 @@
     td.appendChild(ele); 
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"frequencyDay", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[frequency_day]", "onblur":"return calculation()","required":"true"});
+    setAttributes(ele, {"id":"frequencyDay", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[frequency_day]", "onblur":"return calculation()","required":"true","min":"0"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"kanbanSize", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[kanban_size]", "onblur":"return calculation()","required":"true"});
+    setAttributes(ele, {"id":"kanbanSize", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[kanban_size]", "onblur":"return calculation()","required":"true","min":"0"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"dayReqBatch", "type": "number","value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[day_req_batch]", "onblur":"return calculation()","required":"true"});
+    setAttributes(ele, {"id":"dayReqBatch", "type": "number","value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[day_req_batch]", "onblur":"return calculation()","required":"true","min":"0"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);
 
@@ -190,10 +187,6 @@
     td.appendChild(ele);  
 
 
-  }
-
-  function setAttributes(el, attrs) {
-    for(var key in attrs) { el.setAttribute(key, attrs[key]); }
   }
 
   function calculation() {
@@ -232,7 +225,7 @@
     return false;
   }
   document.getElementById('maxStock').value = calMaxStock(lotSize, safetyStock);
-  document.getElementById('reOrderPoint').value = calReOrderPoint(safetyStock, reOrderPerValue, lotSize);;
+  document.getElementById('reOrderPoint').value = calReOrderPoint(safetyStock, reOrderPerValue, lotSize);
 }
 
 function calDayReqKanban(dayReqBatch, kanbanSize) {  
@@ -259,38 +252,6 @@ function calReOrderPoint(safetyStock, reOrderPer, lotSize) {
   return reOrderPer > 0 ? reOrderPer : 0;
 }
 
-function trtAutocomplete(){
-  $.ajax({
-    url: "trt_list",
-    dataType: 'json',
-    type: "GET",
-    success: function(result) {  
-      var options = {
-        data: result,
-        getValue: "trt_code",
-        template: { type: "custom",
-          method: function(value, item) {
-           return value +" - "+ item.mat_code + " - " + item.mat_desc;
-          }},
-        list: { match: {  enabled: true },
-          onSelectItemEvent: function() {
-            var value = $(".auto-form-control").getSelectedItemData().mat_code;
-            $("#sfg_code").val(value).trigger("change");
-
-            value = $(".auto-form-control").getSelectedItemData().mat_desc;
-            $("#sfg_desc").val(value).trigger("change");
-          },
-          onHideListEvent: function() {
-            var value = $(".auto-form-control").val().length; 
-            if (value < 3) {$("#sfg_code").val("").trigger("change");$("#sfg_desc").val("").trigger("change");}
-          }
-        },
-        theme: "plate-dark"
-      }; 
-      $(".auto-form-control").easyAutocomplete(options); 
-    }
-  });
-}
  
 
 </script>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_22_071101) do
+ActiveRecord::Schema.define(version: 2019_11_26_145005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,9 +23,9 @@ ActiveRecord::Schema.define(version: 2019_11_22_071101) do
     t.string "sfg_uom", limit: 3, null: false
     t.string "bom_type", limit: 10
     t.integer "base_qty"
-    t.integer "alt_bom_no"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "alt_bom_no"
   end
 
   create_table "mst_materials", force: :cascade do |t|
@@ -131,6 +131,9 @@ ActiveRecord::Schema.define(version: 2019_11_22_071101) do
     t.string "action_status", default: "open"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "sap_plan_order"
+    t.string "alt_bom_no"
+    t.date "plan_order_dt"
   end
 
   create_table "trn_prod_plan_masters", force: :cascade do |t|
@@ -156,6 +159,35 @@ ActiveRecord::Schema.define(version: 2019_11_22_071101) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "trn_sfg_stocks", force: :cascade do |t|
+    t.string "plant", limit: 4
+    t.string "str_loc", limit: 4
+    t.string "sfg_group", limit: 10
+    t.string "trt_code", limit: 40
+    t.string "sfg_code", limit: 16
+    t.string "sfg_desc", limit: 50
+    t.string "sfg_uom", limit: 3
+    t.decimal "stock_qty", precision: 12, scale: 3
+    t.decimal "stock_qty_kg", precision: 12, scale: 3
+    t.string "lot_no", limit: 15
+    t.string "rfid_tag", limit: 30
+    t.date "expiry_dt"
+    t.string "stock_status", limit: 10
+    t.string "sap_batch", limit: 10
+    t.string "sap_docref", limit: 10
+    t.string "sap_status", limit: 1
+    t.string "sap_err_msg", limit: 50
+    t.datetime "sap_trn_dttime"
+    t.datetime "sap_upd_dttime"
+    t.string "insp_lot_no", limit: 10
+    t.string "issue_status", limit: 20
+    t.string "sup_roll_ref", limit: 20
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_trn_sfg_stocks_on_user_id"
+  end
+
   create_table "trt_msts", force: :cascade do |t|
     t.string "trt_code", limit: 40
     t.string "part_no", limit: 10
@@ -176,6 +208,7 @@ ActiveRecord::Schema.define(version: 2019_11_22_071101) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "gauge", precision: 3, scale: 2
+    t.decimal "width", precision: 3, scale: 2
   end
 
 end

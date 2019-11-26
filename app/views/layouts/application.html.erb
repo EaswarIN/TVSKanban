@@ -33,6 +33,15 @@
     padding: 0.5rem !important;
     }
     .w40{width: 40px;}
+    .w60{width: 60px;}
+
+    .alert-bottom{
+    position: fixed;
+    bottom: 5px;
+    left:2%;
+    width: 96%;
+}
+
     </style>
   </head>
 
@@ -55,5 +64,62 @@
   </div>
 </nav> 
 <%= yield %>
+
+<% flash.each do |name, msg| %> 
+  <div class="alert-bottom alert alert-<%= name %>" id="custom-alert-msg">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+     <%= msg %> 
+  </div>
+<% end %>
+
   </body>
+  <script type="text/javascript">
+    $("#custom-alert-msg").fadeTo(2000, 500).slideUp(500, function(){
+        $("#custom-alert-msg").slideUp(500);
+    });
+  
+  $(".removeRow").on("click", function(){
+    $('#newrow').remove();
+  $('#master_new').remove();
+  }); 
+
+    function trtAutocomplete(){
+  $.ajax({
+    url: "trt_list",
+    dataType: 'json',
+    type: "GET",
+    success: function(result) {  
+      var options = {
+        data: result,
+        getValue: "trt_code",
+        template: { type: "custom",
+          method: function(value, item) {
+           return value +" - "+ item.mat_code + " - " + item.mat_desc;
+          }},
+        list: { match: {  enabled: true },
+          onSelectItemEvent: function() {
+            var value = $(".auto-form-control").getSelectedItemData().mat_code;
+            $("#sfg_code").val(value).trigger("change");
+
+            value = $(".auto-form-control").getSelectedItemData().mat_desc;
+            $("#sfg_desc").val(value).trigger("change");
+          },
+          onHideListEvent: function() {
+            var value = $(".auto-form-control").val().length; 
+            if (value < 3) {$("#sfg_code").val("").trigger("change");
+            $("#sfg_desc").val("").trigger("change");}
+          }
+        },
+        theme: "plate-dark"
+      }; 
+      $(".auto-form-control").easyAutocomplete(options); 
+    }
+  });
+}
+
+  function setAttributes(el, attrs) {
+    for(var key in attrs) { el.setAttribute(key, attrs[key]); }
+  }
+
+  </script>
 </html>
