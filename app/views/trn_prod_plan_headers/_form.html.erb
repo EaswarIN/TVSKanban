@@ -320,13 +320,7 @@
     var option = document.createElement("option"); 
     setAttributes(eleSelect, {"id":"bom_type","class": "form-control form-control-sm text-right","style":"width:50px", "name":"trn_prod_plan_header[schedule][0][bom_type]"}); 
     option.text = "G";
-    eleSelect.add(option); 
-    option = document.createElement("option");
-    option.text = "W";
-    eleSelect.add(option); 
-    option = document.createElement("option");
-    option.text = "Y";
-    eleSelect.add(option); 
+    eleSelect.add(option);
     td = tr.insertCell(tdEle);      
     td.appendChild(eleSelect); 
 
