@@ -10,6 +10,7 @@
     <label for="uom">Uom</label>
     <%= f.text_field :sfg_uom, :value => "M" , class: 'form-control form-control-sm'%> 
     
+    
   </div> 
   <div class="col-md-2 mb-2">
     <label for="Shift">Shift</label>
@@ -160,7 +161,7 @@
           <td class=" align-middle">
             Plan
             <%= f.hidden_field :schedule_status, :value => 'Plan',  name: "trn_prod_plan_header[schedule][#{p.id}][schedule_status]"   %>  
-
+<%= f.hidden_field :action_status, :value => "Open" , class: 'form-control form-control-sm',  name: "trn_prod_plan_header[schedule][#{p.id}][action_status]"%> 
           </td> 
         </tr>
         <% end %>
