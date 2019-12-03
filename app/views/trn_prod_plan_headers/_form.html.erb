@@ -140,7 +140,7 @@
           <td class="text-right align-middle"><%= f.text_field :sfg_sequence,  :type => "number", class: 'sfg_sequence form-control form-control-sm text-right w40', name: "trn_prod_plan_header[schedule][#{p.id}][sfg_sequence]", :min=>0%> </td> 
           <td class="align-middle">
             <%= f.text_field :bom_type, :value => p.bom_type,  class: 'form-control form-control-sm w40', name: "trn_prod_plan_header[schedule][#{p.id}][bom_type]", :readonly => true%> 
-  <%= f.hidden_field :alt_bom_no, :value => p.alt_bom_no,  name: "trn_prod_plan_header[schedule][#{p.id}][alt_bom_no]", :readonly => true%>  
+  <%= f.hidden_field :alt_bom_no, :value => p.alt_bom_no,  name: "trn_prod_plan_header[schedule][#{p.id}][alt_bom_no]"%>  
 
           </td>  
           <td class=" align-middle"> 
