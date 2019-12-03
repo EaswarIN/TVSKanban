@@ -109,11 +109,11 @@
         <td class="text-right align-middle"> 
           <%= 
           if !p.stock_qty.blank?
-            stock_qty = (p.stock_qty / p.width).round 
+            stock_qty = (p.stock_qty / p.width).round(2) 
           else
             stock_qty = 0
           end
-          f.text_field :stock_qty, :type => "number", :value => stock_qty, class: 'form-control form-control-sm  text-right stock-qty w40', name: "trn_prod_plan_header[schedule][#{p.id}][stock_qty]", :required => true, :min=>0
+          f.text_field :stock_qty, :type => "number", :value => stock_qty, class: 'form-control form-control-sm  text-right stock-qty w40', name: "trn_prod_plan_header[schedule][#{p.id}][stock_qty]", :required => true, :min=>0, :readonly => true
           %> </td>  
           <td class="text-right align-middle"> 
             <%= 
