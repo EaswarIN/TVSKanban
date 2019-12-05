@@ -55,9 +55,14 @@
           <td class="text-right align-middle"><%= p.safety_stock %></td> 
           <td class="text-right align-middle"><%= p.max_stock %></td> 
           <td class="text-right align-middle"><%= p.re_order_point %></td> 
-          <td class="align-middle"> 
-<%= link_to p.action_status, trn_prod_plan_master_path(:id => p.id, :action_status => p.action_status), method: :put,remote: true %>   <span class="float-right">  <%= link_to "X", p, method: :delete, remote: true, data: { confirm: "Are you sure?" } %>
-</td> 
+          <td class="align-middle">  
+<%= link_to p.action_status, trn_prod_plan_master_path(:id => p.id, :action_status => p.action_status), method: :put,remote: true %>   
+<span class="float-right">
+        <%= link_to  p, method: :delete, remote: true, data: { confirm: "Are you sure?" } do %>
+          <i class="far fa-trash-alt" role="button"> </i>
+        <% end %>
+      </span>
+    </td> 
         </tr>
         <% end %>
       </tbody>

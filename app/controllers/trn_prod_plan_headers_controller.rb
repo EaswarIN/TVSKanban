@@ -52,7 +52,7 @@ class TrnProdPlanHeadersController < ApplicationController
 
       respond_to do |format|
         # TrnProdPlanHeader.update_sequence
-        format.html { redirect_to trn_prod_plan_headers_url, success: 'Prod plan header was successfully created.' }
+        format.html { redirect_to trn_prod_plan_headers_url, success: 'Schedule(s) was successfully created.' }
         format.json { head :no_content }
       end
     end 
@@ -62,12 +62,12 @@ class TrnProdPlanHeadersController < ApplicationController
   # PATCH/PUT /prod_plan_headers/1.json
   def update
     respond_to do |format|
-      if @prod_plan_header.update(prod_plan_header_params)
-        format.html { redirect_to @prod_plan_header, success: 'Prod plan header was successfully updated.' }
-        format.json { render :show, status: :ok, location: @prod_plan_header }
+      if @prod_plan_header.update(prod_plan_header_params["schedule"]["0"])
+        format.html { redirect_to trn_prod_plan_headers_url, success: 'Schedule was successfully updated.' }
+        format.json { head :no_content }
       else
-        format.html { render :edit }
-        format.json { render json: @trn_prod_plan_header.errors, status: :unprocessable_entity }
+         format.html { redirect_to trn_prod_plan_headers_url, danger: 'Schedule update failed.' }
+        format.json { head :no_content }
       end
     end
   end
@@ -80,7 +80,7 @@ class TrnProdPlanHeadersController < ApplicationController
     respond_to do |format|
       # TrnProdPlanHeader.update_sequence
 
-      format.html { redirect_to trn_prod_plan_headers_url, success: 'Prod plan header was successfully destroyed.' }
+      format.html { redirect_to trn_prod_plan_headers_url, success: 'Schedule was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
