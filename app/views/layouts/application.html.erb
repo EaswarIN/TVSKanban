@@ -36,6 +36,7 @@
     .w40{width: 40px;}
     .w60{width: 60px;}
     .w80{width: 80px;}
+    .w120{width: 120px;}
 
     .alert-bottom{
     position: fixed;
@@ -82,7 +83,7 @@
   
   $(".removeRow").on("click", function(){
     $('#newrow').remove();
-  $('#master_new').remove();
+    $('#master_new').remove();
   }); 
 
     function trtAutocomplete(){
@@ -132,6 +133,31 @@
   function setAttributes(el, attrs) {
     for(var key in attrs) { el.setAttribute(key, attrs[key]); }
   }
+
+  var inputQuantity = []; 
+ 
+  $(".input_number").each(function(i) {
+    inputQuantity[i]=this.defaultValue;
+     $(this).data("idx",i); // save this field's index to access later
+  });
+
+  $(document).on('keyup', ".input_number", function (e) {
+    var $field = $(this),
+        val=this.value,
+        $thisIndex=parseInt($field.data("idx"),10); // retrieve the index
+  //        window.console && console.log($field.is(":invalid"));
+      //  $field.is(":invalid") is for Safari, it must be the last to not error in IE8
+    if (this.validity && this.validity.badInput || isNaN(val) || $field.is(":invalid") ) {
+        this.value = inputQuantity[$thisIndex];
+        return;
+    } 
+    if (val.length > Number($field.attr("maxlength"))) {
+      val=val.slice(0, Number($field.attr("maxlength")));
+      $field.val(val);
+    }
+    inputQuantity[$thisIndex]=val;
+  });  
+
 
   </script>
 </html>

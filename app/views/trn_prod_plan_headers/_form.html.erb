@@ -149,7 +149,7 @@
             %> 
           </td> 
           <td class="text-right align-middle">
-            <%= f.text_field :sfg_sequence,  :type => "number", class: 'sfg_sequence form-control form-control-sm text-right w80', name: "trn_prod_plan_header[schedule][#{p.id}][sfg_sequence]", :required => true, :min=>0%> </td> 
+            <%= f.text_field :sfg_sequence,  :type => "number", class: 'sfg_sequence form-control form-control-sm text-right w80 input_number', name: "trn_prod_plan_header[schedule][#{p.id}][sfg_sequence]", :required => true, :min=>0, :maxlength => 3%> </td> 
           <td class="align-middle">
             <%= f.text_field :bom_type, :value => p.bom_type,  class: 'form-control form-control-sm w40', name: "trn_prod_plan_header[schedule][#{p.id}][bom_type]", :readonly => true, :required => true%> 
   <%= f.hidden_field :alt_bom_no, :value => p.alt_bom_no,  name: "trn_prod_plan_header[schedule][#{p.id}][alt_bom_no]"%>  
@@ -172,7 +172,7 @@
               p.sap_plan_order
               f.hidden_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]"
             else
-              f.text_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]", class: 'form-control form-control-sm text-right', :required => true
+              f.text_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]", class: 'form-control form-control-sm text-right w120', :required => true
             end %> 
           </td> 
 
@@ -248,7 +248,7 @@
                 <input id="update_prod_qty" type="number" value="0" class="form-control form-control-sm sfg-plan-qty text-right w80" name="trn_prod_plan_header[schedule][0][sfg_plan_qty]" min="0">
               </td>
               <td class="text-right align-middle"  >
-                <input id="update_seq" type="number" value="" class="form-control form-control-sm text-right w80" name="trn_prod_plan_header[schedule][0][sfg_sequence]" required="true" min="0"></td>
+                <input id="update_seq" type="number" value="" class="form-control form-control-sm text-right input_number w80" name="trn_prod_plan_header[schedule][0][sfg_sequence]" maxlength="3" required="true" min="0"></td>
               <td class="text-right align-middle"  >
                 <input id="update_po" class="form-control form-control-sm text-right" name="trn_prod_plan_header[schedule][0][sap_plan_order]" min="0">
               </td>
@@ -348,7 +348,7 @@
 
 
     var ele = document.createElement('input');
-    setAttributes(ele, {"id":"sap_plan_order", "class": "form-control form-control-sm text-right", "name":"trn_prod_plan_header[schedule][0][sap_plan_order]","min":"0"});
+    setAttributes(ele, {"id":"sap_plan_order", "class": "form-control form-control-sm text-right w120", "name":"trn_prod_plan_header[schedule][0][sap_plan_order]","min":"0"});
     td = tr.insertCell(tdEle);
     td.appendChild(ele);  
  
@@ -368,7 +368,7 @@
 
 
     var ele = document.createElement('input');
-    setAttributes(ele, {"type": "number", "value": "","class": "form-control form-control-sm text-right w80", "name":"trn_prod_plan_header[schedule][0][sfg_sequence]","required":"true","min":"0"});
+    setAttributes(ele, {"type": "number", "value": "","class": "form-control form-control-sm text-right w80 input_number", "name":"trn_prod_plan_header[schedule][0][sfg_sequence]","required":"true","min":"0", "maxlength":"3"});
     td = tr.insertCell(tdEle);      
     td.appendChild(ele);  
 
