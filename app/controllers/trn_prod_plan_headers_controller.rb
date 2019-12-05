@@ -46,7 +46,7 @@ class TrnProdPlanHeadersController < ApplicationController
         num = 1
       end
       prod_plan_header_params["schedule"].each do |k, r| 
-        TrnProdPlanHeader.create(plan_order_no: "MCH-#{num}", plan_order_dt: Date.today, plant: prod_plan_header_params["plant"], work_center: prod_plan_header_params["work_center"], sfg_uom: prod_plan_header_params["sfg_uom"], sfg_desc: r["sfg_desc"], sfg_code: r["sfg_code"], trt_code: r["trt_code"]  , day_req_qty_m2: r["day_req_qty_m2"], stock_qty: r["stock_qty"], sfg_plan_qty: r["sfg_plan_qty"], sfg_sequence: r["sfg_sequence"], bom_type: r["bom_type"], schedule_no: r["schedule_no"], schedule_status: r["schedule_status"], safety_stock: r["safety_stock"], max_stock: r["max_stock"], re_order_point: r["re_order_point"], action_status: r["action_status"], po_type: r["po_type"], sap_plan_order: r["sap_plan_order"], alt_bom_no: r["alt_bom_no"], lot_size: r["lot_size"])
+        TrnProdPlanHeader.create(plan_order_no: "MCH-#{num}", plan_order_dt: prod_plan_header_params["plan_order_dt"], plant: prod_plan_header_params["plant"], work_center: prod_plan_header_params["work_center"], sfg_uom: prod_plan_header_params["sfg_uom"], sfg_desc: r["sfg_desc"], sfg_code: r["sfg_code"], trt_code: r["trt_code"]  , day_req_qty_m2: r["day_req_qty_m2"], stock_qty: r["stock_qty"], sfg_plan_qty: r["sfg_plan_qty"], sfg_sequence: r["sfg_sequence"], bom_type: r["bom_type"], schedule_no: r["schedule_no"], schedule_status: r["schedule_status"], safety_stock: r["safety_stock"], max_stock: r["max_stock"], re_order_point: r["re_order_point"], action_status: r["action_status"], po_type: r["po_type"], sap_plan_order: r["sap_plan_order"], alt_bom_no: r["alt_bom_no"], lot_size: r["lot_size"])
         num = num + 1
       end
 

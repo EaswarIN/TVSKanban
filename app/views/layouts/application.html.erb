@@ -7,7 +7,8 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %> 
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %> 
+    <%= stylesheet_link_tag '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/cupertino/jquery-ui.min.css' %>
+ <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %> 
 
     
     <style type="text/css">
@@ -84,38 +85,48 @@
   }); 
 
     function trtAutocomplete(){
-  $.ajax({
-    url: "trt_list",
-    dataType: 'json',
-    type: "GET",
-    success: function(result) {  
-      var options = {
-        data: result,
-        getValue: "trt_code",
-        template: { type: "custom",
-          method: function(value, item) {
-           return value +" - "+ item.mat_code + " - " + item.mat_desc;
-          }},
-        list: { match: {  enabled: true },
-          onSelectItemEvent: function() {
-            var value = $(".auto-form-control").getSelectedItemData().mat_code;
-            $("#sfg_code").val(value).trigger("change");
+      $.ajax({
+        url: "trt_list",
+        dataType: 'json',
+        type: "GET",
+        success: function(result) {  
+          var options = {
+            data: result,
+            getValue: "trt_code",
+            template: { type: "custom",
+              method: function(value, item) {
+               return value +" - "+ item.mat_code + " - " + item.mat_desc;
+              }},
+            list: { match: {  enabled: true },
+              onSelectItemEvent: function() {
+                var value = $(".auto-form-control").getSelectedItemData().mat_code;
+                $("#sfg_code").val(value).trigger("change");
 
-            value = $(".auto-form-control").getSelectedItemData().mat_desc;
-            $("#sfg_desc").val(value).trigger("change");
-          },
-          onHideListEvent: function() {
-            var value = $(".auto-form-control").val().length; 
-            if (value < 3) {$("#sfg_code").val("").trigger("change");
-            $("#sfg_desc").val("").trigger("change");}
-          }
-        },
-        theme: "plate-dark"
-      }; 
-      $(".auto-form-control").easyAutocomplete(options); 
+                value = $(".auto-form-control").getSelectedItemData().mat_desc;
+                $("#sfg_desc").val(value).trigger("change");
+              },
+              onHideListEvent: function() {
+                var value = $(".auto-form-control").val().length; 
+                if (value < 3) {$("#sfg_code").val("").trigger("change");
+                $("#sfg_desc").val("").trigger("change");}
+              }
+            },
+            theme: "plate-dark"
+          }; 
+          $(".auto-form-control").easyAutocomplete(options); 
+        }
+      });
     }
-  });
-}
+    function poAutocomplete(){
+      $.ajax({
+        url: "po_list",
+        dataType: 'json',
+        type: "GET",
+        success: function(result) {  
+           
+        }
+      });
+    }
 
   function setAttributes(el, attrs) {
     for(var key in attrs) { el.setAttribute(key, attrs[key]); }

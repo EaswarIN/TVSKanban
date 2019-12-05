@@ -8,7 +8,9 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
 require("jquery") 
+require("jquery-ui")
 
+import JQuery from 'jquery';
 import '../stylesheets/application'
 import "./bootstrap_custom.js"  
 import "./jquery.easy-autocomplete.js"  
@@ -20,6 +22,5 @@ import "./jquery.easy-autocomplete.js"
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-// import JQuery from 'jquery';
-// window.$ = window.JQuery = JQuery;
+window.$ = window.JQuery = JQuery;
 
