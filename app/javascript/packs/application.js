@@ -8,7 +8,7 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
 require("jquery") 
-require("jquery-ui")
+require("jquery-ui") 
 
 import JQuery from 'jquery';
 import '../stylesheets/application';

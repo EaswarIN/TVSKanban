@@ -167,8 +167,8 @@
             %>
           </td>   
           <td class="text-right align-middle">
-            <%= if !p.sap_plan_order.blank?
-              p.sap_plan_order
+            <%=p.sap_plan_order%>
+            <%= if (!p.sap_plan_order.blank?) 
               f.hidden_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]"
             else
               f.text_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]", class: 'form-control form-control-sm text-right w120', :required => true
@@ -186,7 +186,7 @@
       </tbody>
     </table>
   </div>  
-  <%= button_tag 'Add', onclick: "addRow()", type: 'button', :class => "btn btn-primary"%>  
+  <%= button_tag 'Add', onclick: "addRowHeader()", type: 'button', :class => "btn btn-primary"%>  
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%>  
   <%= button_tag 'Submit', type: 'submit', :class => "btn btn-primary"%> 
   <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>  
@@ -308,7 +308,7 @@
     sfg_plan_qty.val(qty.toFixed());
   });
 
-  function addRow() {
+  function addRowHeader() {
     if (document.getElementById('master_new') !== null) {
       return false;
     }

@@ -68,7 +68,7 @@
       </tbody>
     </table>
   </div>  
-  <%= button_tag 'Add', onclick: "addRow()", type: 'button', :class => "btn btn-primary"%> 
+  <%= button_tag 'Add', onclick: "addRowMaster()", type: 'button', :class => "btn btn-primary"%> 
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%> 
   <%= button_tag 'Submit', onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%>   
 
@@ -99,7 +99,7 @@
     return true;
   }
 
-  function addRow() {
+  function addRowMaster() {
     if (document.getElementById('newrow') !== null) {
       return false;
     }
