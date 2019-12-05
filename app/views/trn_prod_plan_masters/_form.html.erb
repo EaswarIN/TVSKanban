@@ -87,110 +87,171 @@
   <% end %> 
 <% end %>   
 <script type="text/javascript"> 
-
   function validation() {
     var dayReqBatch = document.getElementById('dayReqBatch');
     var kanbanSize = document.getElementById('kanbanSize');
     var frequencyDay = document.getElementById('frequencyDay');
     var noOfHrs = document.getElementById('noOfHrs');
-    var reOrderPer = document.getElementById('reOrderPer'); 
-
-    if (dayReqBatch == null ||  kanbanSize == null  || frequencyDay == null  || noOfHrs == null || reOrderPer == null) { return false; } 
+    var reOrderPer = document.getElementById('reOrderPer');
+    if (dayReqBatch == null || kanbanSize == null || frequencyDay == null || noOfHrs == null || reOrderPer == null) {
+      return false;
+    }
     return true;
   }
 
   function addRow() {
-    if(document.getElementById('newrow') !== null)
-      { return false ;}
-    
+    if (document.getElementById('newrow') !== null) {
+      return false;
+    }
     trtAutocomplete();
-
     var tr = document.getElementById('newrow');
-
     var empTab = document.getElementById('planMasterTable');
-    var rowCnt = empTab.rows.length;        // GET TABLE ROW COUNT.
+    var rowCnt = empTab.rows.length; // GET TABLE ROW COUNT.
     var tr = empTab.insertRow(rowCnt);
-    tr.id = "newrow"   
-
-    var tdEle = document.createElement('td');   
-  
-    
+    tr.id = "newrow"
+    var tdEle = document.createElement('td');
     var eleSelect = document.createElement('SELECT');
-    var option = document.createElement("option"); 
-    setAttributes(eleSelect, {"id":"action_status","class": "form-control form-control-sm","style":"width:90px", "name":"trn_prod_plan_master[action_status]"}); 
+    var option = document.createElement("option");
+    setAttributes(eleSelect, {
+      "id": "action_status",
+      "class": "form-control form-control-sm",
+      "style": "width:90px",
+      "name": "trn_prod_plan_master[action_status]"
+    });
     option.text = "Active";
-    eleSelect.add(option); 
+    eleSelect.add(option);
     option = document.createElement("option");
     option.text = "In-active";
-    eleSelect.add(option); 
-    td = tr.insertCell(tdEle);      
-    td.appendChild(eleSelect);  
-
+    eleSelect.add(option);
+    td = tr.insertCell(tdEle);
+    td.appendChild(eleSelect);
     var ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"reOrderPoint", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[re_order_point]"});
+    setAttributes(ele, {
+      "id": "reOrderPoint",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm text-right",
+      "name": "trn_prod_plan_master[re_order_point]"
+    });
     td = tr.insertCell(tdEle);
-    td.appendChild(ele);  
-
-    ele = document.createElement('input');
-    ele.readOnly = true;
-    setAttributes(ele, {"id":"maxStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[max_stock]"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele); 
-
-    ele = document.createElement('input');
-    ele.readOnly = true;
-    setAttributes(ele, {"id":"safetyStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[safety_stock]"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
-
-    ele = document.createElement('input');
-    ele.readOnly = true;
-    setAttributes(ele, {"id":"lotSize", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[lot_size]"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele); 
-
-    
-    ele = document.createElement('input');
-    ele.readOnly = true;
-    setAttributes(ele, {"id":"dayReqKanban", "type": "number", "value": "0","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[day_req_kanban]"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele); 
-
-    ele = document.createElement('input');
-    setAttributes(ele, {"id":"frequencyDay", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[frequency_day]", "onblur":"return calculation()","required":"true","min":"0"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
-
-    ele = document.createElement('input');
-    setAttributes(ele, {"id":"kanbanSize", "type": "number", "value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[kanban_size]", "onblur":"return calculation()","required":"true","min":"0"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
-
-    ele = document.createElement('input');
-    setAttributes(ele, {"id":"dayReqBatch", "type": "number","value": "","class": "form-control form-control-sm text-right", "name":"trn_prod_plan_master[day_req_batch]", "onblur":"return calculation()","required":"true","min":"0"});
-    td = tr.insertCell(tdEle);      
     td.appendChild(ele);
-
-
     ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"sfg_code", "value": "","class": "form-control form-control-sm", "name":"trn_prod_plan_master[sfg_code]","style":"width:150px", "required":"true"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
-
+    setAttributes(ele, {
+      "id": "maxStock",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm text-right",
+      "name": "trn_prod_plan_master[max_stock]"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
     ele = document.createElement('input');
     ele.readOnly = true;
-    setAttributes(ele, {"id":"sfg_desc", "value": "","class": "auto-form-control form-control form-control-sm", "name":"trn_prod_plan_master[sfg_desc]","style":"width:210px", "required":"true"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
-
+    setAttributes(ele, {
+      "id": "safetyStock",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm text-right",
+      "name": "trn_prod_plan_master[safety_stock]"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"trt_code", "class": "auto-form-control form-control form-control-sm", "name":"trn_prod_plan_master[trt_code]", "required":"true"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
-
-
+    ele.readOnly = true;
+    setAttributes(ele, {
+      "id": "lotSize",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm text-right",
+      "name": "trn_prod_plan_master[lot_size]"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    ele.readOnly = true;
+    setAttributes(ele, {
+      "id": "dayReqKanban",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm text-right",
+      "name": "trn_prod_plan_master[day_req_kanban]"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    setAttributes(ele, {
+      "id": "frequencyDay",
+      "type": "number",
+      "value": "",
+      "class": "form-control form-control-sm text-right",
+      "name": "trn_prod_plan_master[frequency_day]",
+      "onblur": "return calculation()",
+      "required": "true",
+      "min": "0"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    setAttributes(ele, {
+      "id": "kanbanSize",
+      "type": "number",
+      "value": "",
+      "class": "form-control form-control-sm text-right",
+      "name": "trn_prod_plan_master[kanban_size]",
+      "onblur": "return calculation()",
+      "required": "true",
+      "min": "0"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    setAttributes(ele, {
+      "id": "dayReqBatch",
+      "type": "number",
+      "value": "",
+      "class": "form-control form-control-sm text-right",
+      "name": "trn_prod_plan_master[day_req_batch]",
+      "onblur": "return calculation()",
+      "required": "true",
+      "min": "0"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    ele.readOnly = true;
+    setAttributes(ele, {
+      "id": "sfg_code",
+      "value": "",
+      "class": "form-control form-control-sm",
+      "name": "trn_prod_plan_master[sfg_code]",
+      "style": "width:150px",
+      "required": "true"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    ele.readOnly = true;
+    setAttributes(ele, {
+      "id": "sfg_desc",
+      "value": "",
+      "class": "auto-form-control form-control form-control-sm",
+      "name": "trn_prod_plan_master[sfg_desc]",
+      "style": "width:210px",
+      "required": "true"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    setAttributes(ele, {
+      "id": "trt_code",
+      "class": "auto-form-control form-control form-control-sm",
+      "name": "trn_prod_plan_master[trt_code]",
+      "required": "true"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
   }
 
   function calculation() {
@@ -198,65 +259,61 @@
     var kanbanSize = document.getElementById('kanbanSize');
     var frequencyDay = document.getElementById('frequencyDay');
     var noOfHrs = document.getElementById('noOfHrs');
-    var reOrderPer = document.getElementById('reOrderPer'); 
-
-    if (dayReqBatch == null ||  kanbanSize == null  || frequencyDay == null  || noOfHrs == null || reOrderPer == null) {
+    var reOrderPer = document.getElementById('reOrderPer');
+    if (dayReqBatch == null || kanbanSize == null || frequencyDay == null || noOfHrs == null || reOrderPer == null) {
       return false;
     }
     var dayReqBatchValue = parseInt(dayReqBatch.value);
     var kanbanSizeValue = parseInt(kanbanSize.value);
     var frequencyDayValue = parseInt(frequencyDay.value);
     var noOfHrsValue = parseInt(noOfHrs.value);
-    var reOrderPerValue = parseInt(reOrderPer.value); 
-
-    if (isNaN(dayReqBatchValue) || dayReqBatchValue < 0 ||  isNaN(kanbanSizeValue) || kanbanSizeValue < 0 || isNaN(frequencyDayValue) || frequencyDayValue < 0 || isNaN(noOfHrsValue) || noOfHrsValue < 0 || isNaN(reOrderPerValue) || reOrderPerValue < 0) {
-     return false;
-   }
-
-   var dayReqKanban = calDayReqKanban(dayReqBatchValue, kanbanSizeValue);
-   document.getElementById('dayReqKanban').value = dayReqKanban; 
-
-   if (dayReqKanban == null || dayReqKanban < 0) {
-    return false;
+    var reOrderPerValue = parseInt(reOrderPer.value);
+    if (isNaN(dayReqBatchValue) || dayReqBatchValue < 0 || isNaN(kanbanSizeValue) || kanbanSizeValue < 0 || isNaN(frequencyDayValue) || frequencyDayValue < 0 ||
+      isNaN(noOfHrsValue) || noOfHrsValue < 0 || isNaN(reOrderPerValue) || reOrderPerValue < 0) {
+      return false;
+    }
+    var dayReqKanban = calDayReqKanban(dayReqBatchValue, kanbanSizeValue);
+    document.getElementById('dayReqKanban').value = dayReqKanban;
+    if (dayReqKanban == null || dayReqKanban < 0) {
+      return false;
+    }
+    var lotSize = calLotSize(dayReqKanban, frequencyDayValue);
+    document.getElementById('lotSize').value = lotSize;
+    var safetyStock = calSafetyStock(dayReqKanban, noOfHrsValue);
+    document.getElementById('safetyStock').value = safetyStock;
+    if (lotSize == null || lotSize < 0) {
+      return false;
+    }
+    document.getElementById('maxStock').value = calMaxStock(lotSize, safetyStock);
+    document.getElementById('reOrderPoint').value = calReOrderPoint(safetyStock, reOrderPerValue, lotSize);
   }
-  var lotSize = calLotSize(dayReqKanban, frequencyDayValue);
-  document.getElementById('lotSize').value = lotSize; 
 
-  var safetyStock = calSafetyStock(dayReqKanban, noOfHrsValue);
-  document.getElementById('safetyStock').value = safetyStock;
-
-  if (lotSize == null || lotSize < 0) {
-    return false;
+  function calDayReqKanban(dayReqBatch, kanbanSize) {
+    dayReqKanban = Math.round(dayReqBatch / kanbanSize);
+    console.log(dayReqKanban);
+    return dayReqKanban > 0 ? dayReqKanban : 0;
   }
-  document.getElementById('maxStock').value = calMaxStock(lotSize, safetyStock);
-  document.getElementById('reOrderPoint').value = calReOrderPoint(safetyStock, reOrderPerValue, lotSize);
+
+  function calLotSize(dayReqKanban, frequencyDay) {
+    kanbanSize = Math.round(dayReqKanban / frequencyDay);
+    return kanbanSize > 0 ? kanbanSize : 0;
+  }
+
+  function calSafetyStock(dayReqKanban, noOfHrs) {
+    frequencyDay = Math.round(parseFloat(dayReqKanban / 24) * noOfHrs);
+    return frequencyDay > 0 ? frequencyDay : 0;
+  }
+
+  function calMaxStock(lotSize, safetyStock) {
+    noOfHrs = Math.round(lotSize + safetyStock);
+    return noOfHrs > 0 ? noOfHrs : 0;
+  }
+
+  function calReOrderPoint(safetyStock, reOrderPer, lotSize) {
+    reOrderPer = Math.round(safetyStock * (parseFloat(parseFloat(reOrderPer / 100) * lotSize)));
+    return reOrderPer > 0 ? reOrderPer : 0;
 }
 
-function calDayReqKanban(dayReqBatch, kanbanSize) {  
-  dayReqKanban = Math.round(dayReqBatch / kanbanSize);
-  console.log(dayReqKanban);
-  return dayReqKanban > 0 ? dayReqKanban : 0;
-}
-
-function calLotSize(dayReqKanban, frequencyDay) {
-  kanbanSize = Math.round(dayReqKanban / frequencyDay); 
-  return kanbanSize > 0 ? kanbanSize : 0;
-}
-function calSafetyStock(dayReqKanban, noOfHrs) {
-  frequencyDay = Math.round(parseFloat(dayReqKanban / 24) * noOfHrs); 
-  return frequencyDay > 0 ? frequencyDay : 0;
-
-}
-function calMaxStock(lotSize, safetyStock) {
-  noOfHrs = Math.round(lotSize + safetyStock); 
-  return noOfHrs > 0 ? noOfHrs : 0;
-}
-function calReOrderPoint(safetyStock, reOrderPer, lotSize) {  
-  reOrderPer = Math.round(safetyStock * (parseFloat(parseFloat(reOrderPer/100) * lotSize))); 
-  return reOrderPer > 0 ? reOrderPer : 0;
-}
-
- 
 
 </script>
 

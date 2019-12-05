@@ -45,8 +45,7 @@
     </thead>
     <tbody>
       <% plan_headers_list.each do |p| %> 
-      <tr id="header_<%= p.id %>" class="element-row">
-          <%= f.hidden_field id: "plan_header_id", :value => p.id %>
+      <tr id="header_<%= p.id %>" class="element-row"> 
  <input type="hidden" id="plan_header_id" value="<%= p.id %>">
 
         <td class=" align-middle" id="plan_header_trt_code">
@@ -271,174 +270,246 @@
   </div>
 </div>
 
-<script type="text/javascript"> 
-
- $(document).on('click', ".edit_header", function(){ 
+<script type="text/javascript">  
+  $(document).on('click', ".edit_header", function() {
     var $this = $(this);
     var ele = $this.closest('.element-row');
-    $('#update_trt_code').html(ele.find('#plan_header_trt_code').html().trim()); 
-
-    var updateRow = $('.update-element-row'); 
-    updateRow.find('#update_sfg_code').html(ele.find('#plan_header_sfg_code').html().trim()); 
-    updateRow.find('#update_safty_stk').html(ele.find('#plan_header_safty_stk').html().trim() || 0); 
-    updateRow.find('#update_cur_stk').html(parseInt(ele.find('#plan_header_cur_stk').html()) || 0); 
-    updateRow.find('#update_prod_qty').val(parseInt(ele.find('#plan_header_prod_qty').html()) || 0); 
-    updateRow.find('#update_seq').val(parseInt(ele.find('#plan_header_seq').html())); 
-    updateRow.find('#update_po').val(ele.find('#plan_header_po').html().trim()); 
-
+    $('#update_trt_code').html(ele.find('#plan_header_trt_code').html().trim());
+    var updateRow = $('.update-element-row');
+    updateRow.find('#update_sfg_code').html(ele.find('#plan_header_sfg_code').html().trim());
+    updateRow.find('#update_safty_stk').html(ele.find('#plan_header_safty_stk').html().trim() || 0);
+    updateRow.find('#update_cur_stk').html(parseInt(ele.find('#plan_header_cur_stk').html()) || 0);
+    updateRow.find('#update_prod_qty').val(parseInt(ele.find('#plan_header_prod_qty').html()) || 0);
+    updateRow.find('#update_seq').val(parseInt(ele.find('#plan_header_seq').html()));
+    updateRow.find('#update_po').val(ele.find('#plan_header_po').html().trim());
     $('#update_form').attr('action', function(i, value) {
-        return "/trn_prod_plan_headers/" + ele.find('#plan_header_id').val().trim();
+      return "/trn_prod_plan_headers/" + ele.find('#plan_header_id').val().trim();
     });
   });
 
- $(document).on('click', '.trtList', function(){
-  var id = "#master_" + $("#master_id").val(); 
-  $(id).find(".trt_code").val($(this).find("#trt_code").text()); 
-  $(id).find(".sfg_sequence").val($(this).find("#seq_no").val());  
-}); 
+  $(document).on('click', '.trtList', function() {
+    var id = "#master_" + $("#master_id").val();
+    $(id).find(".trt_code").val($(this).find("#trt_code").text());
+    $(id).find(".sfg_sequence").val($(this).find("#seq_no").val());
+  });
 
-
-  $(document).on('blur', ".stock-qty, .lot-size, .safety-stock", function(){ 
+  $(document).on('blur', ".stock-qty, .lot-size, .safety-stock", function() {
     var $this = $(this);
     var ele = $this.closest('.element-row');
     var stock_qty = parseInt(ele.find('.stock-qty').val()) || 0;
     var safety_stock = parseInt(ele.find('.safety-stock').val()) || 0;
     var lot_size = parseInt(ele.find('.lot-size').val()) || 0;
-
     var sfg_plan_qty = ele.find('.sfg-plan-qty');
     sfg_plan_qty.val('');
-
     var qty = lot_size + safety_stock - stock_qty;
+    if (qty <= 0) {
+      qty = 0
+    }
+    sfg_plan_qty.val(qty.toFixed());
+  });
 
-    if (qty <= 0) {qty = 0}
-    sfg_plan_qty.val(qty.toFixed()); 
-  }); 
-
- function addRow() {
-  if(document.getElementById('master_new') !== null)
-    { return false;}
-
+  function addRow() {
+    if (document.getElementById('master_new') !== null) {
+      return false;
+    }
     trtAutocomplete();
     var tr = document.getElementById('master_new');
-
     var empTab = document.getElementById('planHeaderTable');
-    var rowCnt = empTab.rows.length;        // GET TABLE ROW COUNT.
+    var rowCnt = empTab.rows.length; // GET TABLE ROW COUNT.
     var tr = empTab.insertRow(rowCnt);
-    tr.id = "master_new"   
-    tr.className = "element-row"   
-
-    var tdEle = document.createElement('td');   
-
+    tr.id = "master_new"
+    tr.className = "element-row"
+    var tdEle = document.createElement('td');
     var eleSelect = document.createElement('SELECT');
-    var option = document.createElement("option"); 
-    setAttributes(eleSelect, {"id":"schedule_status","class": "form-control form-control-sm","style":"width:90px", "name":"trn_prod_plan_header[schedule][0][schedule_status]"}); 
+    var option = document.createElement("option");
+    setAttributes(eleSelect, {
+      "id": "schedule_status",
+      "class": "form-control form-control-sm",
+      "style": "width:90px",
+      "name": "trn_prod_plan_header[schedule][0][schedule_status]"
+    });
     option.text = "WIP";
-    eleSelect.add(option); 
+    eleSelect.add(option);
     option = document.createElement("option");
     option.text = "Plan";
-    eleSelect.add(option); 
+    eleSelect.add(option);
     td = tr.insertCell(tdEle);
-    td.setAttribute("colSpan", "3");      
-    td.appendChild(eleSelect); 
-
+    td.setAttribute("colSpan", "3");
+    td.appendChild(eleSelect);
     var ele = document.createElement('input');
-    setAttributes(ele, {"id":"schedule_no","type": "number", "value": "0","class": "form-control form-control-sm text-right w80", "name":"trn_prod_plan_header[schedule][0][schedule_no]","min":"0"});
+    setAttributes(ele, {
+      "id": "schedule_no",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm text-right w80",
+      "name": "trn_prod_plan_header[schedule][0][schedule_no]",
+      "min": "0"
+    });
     td = tr.insertCell(tdEle);
-    td.appendChild(ele);  
-
-
+    td.appendChild(ele);
     var ele = document.createElement('input');
-    setAttributes(ele, {"id":"sap_plan_order", "class": "form-control form-control-sm text-right w120", "name":"trn_prod_plan_header[schedule][0][sap_plan_order]","min":"0"});
+    setAttributes(ele, {
+      "id": "sap_plan_order",
+      "class": "form-control form-control-sm text-right w120",
+      "name": "trn_prod_plan_header[schedule][0][sap_plan_order]",
+      "min": "0"
+    });
     td = tr.insertCell(tdEle);
-    td.appendChild(ele);  
- 
-
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"po_type","value":"T", "class": "form-control form-control-sm w40", "name":"trn_prod_plan_header[schedule][0][po_type]"});
+    setAttributes(ele, {
+      "id": "po_type",
+      "value": "T",
+      "class": "form-control form-control-sm w40",
+      "name": "trn_prod_plan_header[schedule][0][po_type]"
+    });
     td = tr.insertCell(tdEle);
-    td.appendChild(ele);   
-
+    td.appendChild(ele);
     var eleSelect = document.createElement('SELECT');
-    var option = document.createElement("option"); 
-    setAttributes(eleSelect, {"id":"bom_type","class": "form-control form-control-sm text-right w40", "name":"trn_prod_plan_header[schedule][0][bom_type]"}); 
+    var option = document.createElement("option");
+    setAttributes(eleSelect, {
+      "id": "bom_type",
+      "class": "form-control form-control-sm text-right w40",
+      "name": "trn_prod_plan_header[schedule][0][bom_type]"
+    });
     option.text = "G";
     eleSelect.add(option);
-    td = tr.insertCell(tdEle);      
-    td.appendChild(eleSelect); 
-
-
-    var ele = document.createElement('input');
-    setAttributes(ele, {"type": "number", "value": "","class": "form-control form-control-sm text-right w80 input_number", "name":"trn_prod_plan_header[schedule][0][sfg_sequence]","required":"true","min":"0", "maxlength":"3"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
-
-
-    ele = document.createElement('input');
-    setAttributes(ele, {"id":"sfg_plan_qty", "type": "number", "value": "0","class": "form-control form-control-sm sfg-plan-qty text-right w80", "name":"trn_prod_plan_header[schedule][0][sfg_plan_qty]","min":"0"});
     td = tr.insertCell(tdEle);
-    td.appendChild(ele);  
-
+    td.appendChild(eleSelect);
+    var ele = document.createElement('input');
+    setAttributes(ele, {
+      "type": "number",
+      "value": "",
+      "class": "form-control form-control-sm text-right w80 input_number",
+      "name": "trn_prod_plan_header[schedule][0][sfg_sequence]",
+      "required": "true",
+      "min": "0",
+      "maxlength": "3"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"stock_qty", "type": "number", "value": "0","class": "form-control form-control-sm text-right w80 stock-qty", "name":"trn_prod_plan_header[schedule][0][stock_qty]","min":"0"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele); 
-
+    setAttributes(ele, {
+      "id": "sfg_plan_qty",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm sfg-plan-qty text-right w80",
+      "name": "trn_prod_plan_header[schedule][0][sfg_plan_qty]",
+      "min": "0"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"safetyStock", "type": "number", "value": "0","class": "form-control form-control-sm text-right w80 safety-stock", "name":"trn_prod_plan_header[schedule][0][safety_stock]","min":"0"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
-
+    setAttributes(ele, {
+      "id": "stock_qty",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm text-right w80 stock-qty",
+      "name": "trn_prod_plan_header[schedule][0][stock_qty]",
+      "min": "0"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"type":"hidden", "id":"max_stock",  "value": "0","class": "form-control form-control-sm text-right w80", "name":"trn_prod_plan_header[schedule][0][max_stock]" }); 
-    td.appendChild(ele); 
-
-    
+    setAttributes(ele, {
+      "id": "safetyStock",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm text-right w80 safety-stock",
+      "name": "trn_prod_plan_header[schedule][0][safety_stock]",
+      "min": "0"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"type":"hidden","id":"reorder_point",  "value": "0","class": "form-control form-control-sm text-right w80", "name":"trn_prod_plan_header[schedule][0][re_order_point]" }); 
-    td.appendChild(ele); 
- 
+    setAttributes(ele, {
+      "type": "hidden",
+      "id": "max_stock",
+      "value": "0",
+      "class": "form-control form-control-sm text-right w80",
+      "name": "trn_prod_plan_header[schedule][0][max_stock]"
+    });
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"lot_size",  "value": "0","class": " form-control form-control-sm text-right w80 lot-size", "type": "number", "name":"trn_prod_plan_header[schedule][0][lot_size]","required":"true","min":"0"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele); 
-
+    setAttributes(ele, {
+      "type": "hidden",
+      "id": "reorder_point",
+      "value": "0",
+      "class": "form-control form-control-sm text-right w80",
+      "name": "trn_prod_plan_header[schedule][0][re_order_point]"
+    });
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"day_req_qty_m2", "type": "number", "value": "0","class": "form-control form-control-sm text-right w80", "name":"trn_prod_plan_header[schedule][0][day_req_qty_m2]", "required":"true","min":"0"}); 
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele); 
-    
-
+    setAttributes(ele, {
+      "id": "lot_size",
+      "value": "0",
+      "class": " form-control form-control-sm text-right w80 lot-size",
+      "type": "number",
+      "name": "trn_prod_plan_header[schedule][0][lot_size]",
+      "required": "true",
+      "min": "0"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"type":"hidden","id":"sfg_desc","class": " form-control form-control-sm", "name":"trn_prod_plan_header[schedule][0][sfg_desc]","required":"true"});       
-    td.appendChild(ele); 
-
+    setAttributes(ele, {
+      "id": "day_req_qty_m2",
+      "type": "number",
+      "value": "0",
+      "class": "form-control form-control-sm text-right w80",
+      "name": "trn_prod_plan_header[schedule][0][day_req_qty_m2]",
+      "required": "true",
+      "min": "0"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
     ele = document.createElement('input');
-    setAttributes(ele, {"id":"sfg_code",  "value": "","class": " form-control form-control-sm", "name":"trn_prod_plan_header[schedule][0][sfg_code]","style":"width:135px", "required":"true"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele);  
- 
-
-    ele = document.createElement('input'); 
-    setAttributes(ele, {"class": "auto-form-control trt_code form-control form-control-sm", "data-id":"new", "name":"trn_prod_plan_header[schedule][0][trt_code]", "required":"true"});
-    td = tr.insertCell(tdEle);      
-    td.appendChild(ele); 
-
+    setAttributes(ele, {
+      "type": "hidden",
+      "id": "sfg_desc",
+      "class": " form-control form-control-sm",
+      "name": "trn_prod_plan_header[schedule][0][sfg_desc]",
+      "required": "true"
+    });
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    setAttributes(ele, {
+      "id": "sfg_code",
+      "value": "",
+      "class": " form-control form-control-sm",
+      "name": "trn_prod_plan_header[schedule][0][sfg_code]",
+      "style": "width:135px",
+      "required": "true"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    setAttributes(ele, {
+      "class": "auto-form-control trt_code form-control form-control-sm",
+      "data-id": "new",
+      "name": "trn_prod_plan_header[schedule][0][trt_code]",
+      "required": "true"
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
   }
 
   $(document).on('change', '#bom_type', function() {
     var x = this.value;
-    if(x == 'G'){
+    if (x == 'G') {
       $(this).closest('.element-row').find('#po_type').val("T");
-    }else{
+    } else {
       $(this).closest('.element-row').find('#po_type').val("R");
     }
-  }); 
+  });
 
   $('.datepicker').datepicker({
-    minDate : 0,
+    minDate: 0,
     maxDate: "+3m",
     dateFormat: 'yy-mm-dd'
-  });  
-  $('.datepicker').datepicker('setDate', 'today'); 
+  });
+
+  $('.datepicker').datepicker('setDate', 'today');
+
 
 </script> 
