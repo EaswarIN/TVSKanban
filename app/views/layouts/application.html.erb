@@ -81,7 +81,7 @@
         e.preventDefault();
     });
     $(document).on("keydown paste", ".auto-form-control", function(e) {
-    if(e.which != 13) {
+    if(e.which != 13 && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40) {
       $("#sfgCode").val('');
       $("#sfgDesc").val('');
     } 

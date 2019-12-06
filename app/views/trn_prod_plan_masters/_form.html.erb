@@ -90,12 +90,12 @@
     var dayReqBatch = document.getElementById('dayReqBatch');
     var kanbanSize = document.getElementById('kanbanSize');
     var frequencyDay = document.getElementById('frequencyDay'); 
-    var sfgDesc = document.getElementById("sfgDesc");
-    var sfgCode = document.getElementById("sfgCode"); 
-    if ($("#sfgDesc").val().length < 2){ 
+    var sfgDesc = document.querySelector("#sfgDesc");
+    var sfgCode = document.querySelector("#sfgCode"); 
+    if (sfgDesc != null && $("#sfgDesc").val().length < 2){ 
       sfgDesc.setCustomValidity("Fill this by selecting valid TRT number"); 
     }
-    if ($("#sfgCode").val().length < 2){  
+    if (sfgCode != null && $("#sfgCode").val().length < 2){  
       sfgCode.setCustomValidity("Fill this by selecting valid TRT number");
     }
 
