@@ -89,7 +89,7 @@
     <% end %>
     <% plan_masters_list.each do |p| %>
     <tr id="master_<%= p.id %>" class="element-row">
-      <td class="align-middle"> 
+      <td class="align-middle">  
         <%= p.trt_code %> 
         <%= f.hidden_field :trt_code, :value => p.trt_code, name: "trn_prod_plan_header[schedule][#{p.id}][trt_code]" %>
  
@@ -150,7 +150,7 @@
           <td class="text-right align-middle">
             <%= f.text_field :sfg_sequence,  :type => "number", class: 'sfg_sequence form-control form-control-sm text-right w80 input_number', name: "trn_prod_plan_header[schedule][#{p.id}][sfg_sequence]", :required => true, :min=>0, :maxlength => 3%> </td> 
           <td class="align-middle">
-            <%= f.text_field :bom_type, :value => p.bom_type,  class: 'form-control form-control-sm w40 readonly', name: "trn_prod_plan_header[schedule][#{p.id}][bom_type]", :required => true%> 
+            <%= f.text_field :bom_type, :value => p.bom_type,  class: 'form-control form-control-sm w40 readonly', name: "trn_prod_plan_header[schedule][#{p.id}][bom_type]", :required => true %> 
   <%= f.hidden_field :alt_bom_no, :value => p.alt_bom_no,  name: "trn_prod_plan_header[schedule][#{p.id}][alt_bom_no]"%>  
 
           </td>  
@@ -188,7 +188,7 @@
   </div>  
   <%= button_tag 'Add', onclick: "addRowHeader()", type: 'button', :class => "btn btn-primary"%>  
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%>  
-  <%= button_tag 'Submit', type: 'submit', :class => "btn btn-primary"%> 
+  <%= button_tag 'Submit', onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%> 
   <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>  
 
   
@@ -273,6 +273,13 @@
 
 <script type="text/javascript"> 
 
+  function validation() { 
+    var sfgCode = document.getElementById("sfgCode"); 
+    if ($("#sfgCode").val().length < 2){ 
+      sfgCode.setCustomValidity("Fill this by fetching valid TRT number"); 
+    } 
+  }
+
   $(document).on('click', ".edit_header", function() {
     var $this = $(this);
     var ele = $this.closest('.element-row');
@@ -355,6 +362,7 @@
       "class": "form-control form-control-sm text-right w120 ",
       "name": "trn_prod_plan_header[schedule][0][sap_plan_order]",
       "required": "true",
+      "autocomplete":"off",
       "min": "0"
     });
     td = tr.insertCell(tdEle);
@@ -470,21 +478,20 @@
     ele = document.createElement('input');
     setAttributes(ele, {
       "type": "hidden",
-      "id": "sfg_desc",
+      "id": "sfgDesc",
       "class": " form-control form-control-sm",
-      "name": "trn_prod_plan_header[schedule][0][sfg_desc]",
-      "required": "true"
+      "name": "trn_prod_plan_header[schedule][0][sfg_desc]"
     });
     td.appendChild(ele);
     ele = document.createElement('input');
     setAttributes(ele, {
-      "id": "sfg_code",
+      "id": "sfgCode",
       "value": "",
       "class": " form-control form-control-sm readonly",
       "name": "trn_prod_plan_header[schedule][0][sfg_code]",
       "style": "width:135px",
-      "required": "true",
-
+      "autocomplete":"off",
+      "required": "true" 
     });
     td = tr.insertCell(tdEle);
     td.appendChild(ele);

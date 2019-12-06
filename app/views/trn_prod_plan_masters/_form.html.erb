@@ -2,8 +2,7 @@
   <div class="form-row"> 
     <%= f.hidden_field :plant,:value => "1080", :required => true, class: 'form-control form-control-sm'%>
     <div class="col-md-2 mb-2"> 
-      <label for="work_center">Machine #</label>
-
+      <label for="work_center">Machine #</label> 
       <%= f.text_field :work_center, :value => "MCH-1001", :required => true, :maxlength => 10, class: 'form-control form-control-sm'%>  
     </div>
     <div class="col-md-2 mb-2">
@@ -87,13 +86,20 @@
   <% end %> 
 <% end %>   
 <script type="text/javascript"> 
-  function validation() {
+  function validation() { 
     var dayReqBatch = document.getElementById('dayReqBatch');
     var kanbanSize = document.getElementById('kanbanSize');
-    var frequencyDay = document.getElementById('frequencyDay');
-    var noOfHrs = document.getElementById('noOfHrs');
-    var reOrderPer = document.getElementById('reOrderPer');
-    if (dayReqBatch == null || kanbanSize == null || frequencyDay == null || noOfHrs == null || reOrderPer == null) {
+    var frequencyDay = document.getElementById('frequencyDay'); 
+    var sfgDesc = document.getElementById("sfgDesc");
+    var sfgCode = document.getElementById("sfgCode"); 
+    if ($("#sfgDesc").val().length < 2){ 
+      sfgDesc.setCustomValidity("Fill this by selecting valid TRT number"); 
+    }
+    if ($("#sfgCode").val().length < 2){  
+      sfgCode.setCustomValidity("Fill this by selecting valid TRT number");
+    }
+
+    if (dayReqBatch == null || kanbanSize == null || frequencyDay == null) {
       return false;
     }
     return true;
@@ -221,22 +227,24 @@
     td.appendChild(ele);
     ele = document.createElement('input'); 
     setAttributes(ele, {
-      "id": "sfg_code",
+      "id": "sfgCode",
       "value": "",
       "class": "form-control form-control-sm readonly",
       "name": "trn_prod_plan_master[sfg_code]",
       "style": "width:150px",
+      "autocomplete":"off",
       "required": "true"
     });
     td = tr.insertCell(tdEle);
     td.appendChild(ele);
     ele = document.createElement('input'); 
     setAttributes(ele, {
-      "id": "sfg_desc",
+      "id": "sfgDesc",
       "value": "",
-      "class": "auto-form-control form-control form-control-sm readonly",
+      "class": "form-control form-control-sm readonly",
       "name": "trn_prod_plan_master[sfg_desc]",
       "style": "width:210px",
+      "autocomplete":"off",
       "required": "true"
     });
     td = tr.insertCell(tdEle);

@@ -77,6 +77,17 @@
 
   </body>
   <script type="text/javascript">
+    $(document).on("keydown paste", ".readonly", function(e) { 
+        e.preventDefault();
+    });
+    $(document).on("keydown paste", ".auto-form-control", function(e) {
+    if(e.which != 13) {
+      $("#sfgCode").val('');
+      $("#sfgDesc").val('');
+    } 
+        
+    });
+
     $("#custom-alert-msg").fadeTo(5000, 500).slideUp(500, function() {
       $("#custom-alert-msg").slideUp(500);
     });
@@ -110,15 +121,15 @@
               },
               onChooseEvent: function() {
                 var value = $(".auto-form-control").getSelectedItemData().mat_code;
-                $("#sfg_code").val(value).trigger("change");
+                $("#sfgCode").val(value).trigger("change");
                 value = $(".auto-form-control").getSelectedItemData().mat_desc;
-                $("#sfg_desc").val(value).trigger("change");
+                $("#sfgDesc").val(value).trigger("change");
               },
               onHideListEvent: function() {
                 var value = $(".auto-form-control").val().length;
                 if (value < 3) {
-                  $("#sfg_code").val("").trigger("change");
-                  $("#sfg_desc").val("").trigger("change");
+                  $("#sfgCode").val("").trigger("change");
+                  $("#sfgDesc").val("").trigger("change");
                 }
               }
             },
