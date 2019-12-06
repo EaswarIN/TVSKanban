@@ -29,7 +29,7 @@ class TrnProdPlanMastersController < ApplicationController
         format.html { redirect_to trn_prod_plan_masters_url, success: 'Plan master was successfully created.' }
         format.json { render :index, status: :created, location: @prod_plan_master }
       else
-        format.html { render :new }
+        format.html { render :index }
         format.json { render json: @trn_prod_plan_master.errors, status: :unprocessable_entity }
       end
     end

@@ -80,7 +80,10 @@
     $("#custom-alert-msg").fadeTo(5000, 500).slideUp(500, function() {
       $("#custom-alert-msg").slideUp(500);
     });
-    
+      
+    $(".readonly").on('keydown paste', function(e){
+        e.preventDefault();
+    });
     $(".removeRow").on("click", function() {
       $('#newrow').remove();
       $('#master_new').remove();
@@ -105,7 +108,7 @@
               match: {
                 enabled: true
               },
-              onSelectItemEvent: function() {
+              onChooseEvent: function() {
                 var value = $(".auto-form-control").getSelectedItemData().mat_code;
                 $("#sfg_code").val(value).trigger("change");
                 value = $(".auto-form-control").getSelectedItemData().mat_desc;
