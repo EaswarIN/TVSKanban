@@ -124,12 +124,17 @@
                 $("#sfgCode").val(value).trigger("change");
                 value = $(".auto-form-control").getSelectedItemData().mat_desc;
                 $("#sfgDesc").val(value).trigger("change");
+
+                $("input#sfgCode").attr("onblur", "setCustomValidity('')");
+                $("input#sfgCode").attr("oninput", "setCustomValidity('')"); 
+                // $("input#sfgDesc").attr("onblur", "setCustomValidity('')");
+                // $("input#sfgDesc").attr("oninput", "setCustomValidity('')"); 
               },
               onHideListEvent: function() {
                 var value = $(".auto-form-control").val().length;
                 if (value < 3) {
                   $("#sfgCode").val("").trigger("change");
-                  $("#sfgDesc").val("").trigger("change");
+                  $("#sfgDesc").val("").trigger("change"); 
                 }
               }
             },

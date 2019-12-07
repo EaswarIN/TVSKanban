@@ -69,7 +69,7 @@
   </div>  
   <%= button_tag 'Add', onclick: "addRowMaster()", type: 'button', :class => "btn btn-primary"%> 
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%> 
-  <%= button_tag 'Submit', onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%>   
+  <%= button_tag 'Submit', id:"btnSubmit", onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%>   
 
   <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>   
 
@@ -85,24 +85,17 @@
     </div>
   <% end %> 
 <% end %>   
-<script type="text/javascript"> 
-  function validation() { 
+<script type="text/javascript">  
+  function validation() {  
     var dayReqBatch = document.getElementById('dayReqBatch');
     var kanbanSize = document.getElementById('kanbanSize');
     var frequencyDay = document.getElementById('frequencyDay'); 
-    var sfgDesc = document.querySelector("#sfgDesc");
-    var sfgCode = document.querySelector("#sfgCode"); 
-    if (sfgDesc != null && $("#sfgDesc").val().length < 2){ 
-      sfgDesc.setCustomValidity("Fill this by selecting valid TRT number"); 
-    }
-    if (sfgCode != null && $("#sfgCode").val().length < 2){  
-      sfgCode.setCustomValidity("Fill this by selecting valid TRT number");
-    }
 
     if (dayReqBatch == null || kanbanSize == null || frequencyDay == null) {
       return false;
     }
     return true;
+
   }
 
   function addRowMaster() {
@@ -233,7 +226,8 @@
       "name": "trn_prod_plan_master[sfg_code]",
       "style": "width:150px",
       "autocomplete":"off",
-      "required": "true"
+      "required": "true",
+      "oninvalid":"this.setCustomValidity('Fill this by selecting valid TRT number')" 
     });
     td = tr.insertCell(tdEle);
     td.appendChild(ele);
@@ -244,8 +238,7 @@
       "class": "form-control form-control-sm readonly",
       "name": "trn_prod_plan_master[sfg_desc]",
       "style": "width:210px",
-      "autocomplete":"off",
-      "required": "true"
+      "autocomplete":"off" 
     });
     td = tr.insertCell(tdEle);
     td.appendChild(ele);

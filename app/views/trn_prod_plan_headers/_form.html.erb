@@ -150,7 +150,7 @@
           <td class="text-right align-middle">
             <%= f.text_field :sfg_sequence,  :type => "number", class: 'sfg_sequence form-control form-control-sm text-right w80 input_number', name: "trn_prod_plan_header[schedule][#{p.id}][sfg_sequence]", :required => true, :min=>0, :maxlength => 3%> </td> 
           <td class="align-middle">
-            <%= f.text_field :bom_type, :value => p.bom_type,  class: 'form-control form-control-sm w40 readonly', name: "trn_prod_plan_header[schedule][#{p.id}][bom_type]", :required => true,"oninvalid" => "this.setCustomValidity('Cannot save empty Bom Type')" %> 
+            <%= f.text_field :bom_type, :value => p.bom_type,  class: 'form-control form-control-sm w40 readonly', name: "trn_prod_plan_header[schedule][#{p.id}][bom_type]", :required => true,"oninvalid" => "this.setCustomValidity('Cannot save empty Bom Type');","oninput" => "this.setCustomValidity('');" %> 
   <%= f.hidden_field :alt_bom_no, :value => p.alt_bom_no,  name: "trn_prod_plan_header[schedule][#{p.id}][alt_bom_no]"%>  
 
           </td>  
@@ -163,7 +163,7 @@
             else
               po_type = 'R'
             end
-            f.text_field :po_type, :value => po_type,   class: 'form-control form-control-sm w40 readonly', name: "trn_prod_plan_header[schedule][#{p.id}][po_type]",  :required => true,"oninvalid" => "this.setCustomValidity('Cannot save empty PO Type')"
+            f.text_field :po_type, :value => po_type,   class: 'form-control form-control-sm w40 readonly', name: "trn_prod_plan_header[schedule][#{p.id}][po_type]",  :required => true,"oninvalid" => "this.setCustomValidity('Cannot save empty PO Type');","oninput" => "this.setCustomValidity('');"
             %>
           </td>   
           <td class="text-right align-middle">
@@ -171,7 +171,7 @@
             <%= if (!p.sap_plan_order.blank?) 
               f.hidden_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]" 
             else
-              f.text_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]", class: 'form-control form-control-sm text-right w120 readonly', :required => true,"oninvalid" => "this.setCustomValidity('Cannot save empty PO No.')"
+              f.text_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]", class: 'form-control form-control-sm text-right w120 readonly', :required => true,"oninvalid" => "this.setCustomValidity('Cannot save empty PO No.');","oninput" => "this.setCustomValidity('');"
             end %> 
           </td> 
 
@@ -188,7 +188,7 @@
   </div>  
   <%= button_tag 'Add', onclick: "addRowHeader()", type: 'button', :class => "btn btn-primary"%>  
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%>  
-  <%= button_tag 'Submit', onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%> 
+  <%= button_tag 'Submit', type: 'submit', :class => "btn btn-primary"%> 
   <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>  
 
   
@@ -273,18 +273,6 @@
 
 <script type="text/javascript"> 
 
-  function validation() { 
-    var sfgCode = document.querySelector("#sfgCode"); 
-    if (sfgCode != null && $("#sfgCode").val().length < 2){ 
-      sfgCode.setCustomValidity("Fill this by selecting valid TRT number"); 
-    } 
-    // var readonly = document.querySelector(".readonly");
-    // $(".readonly").each(function( index ) {
-    //   $(this).setCustomValidity("Fill this by selecting valid TRT number"); 
-    //   console.log( index + ": " + $(this).text() );
-    // }); 
-
-  }
 
   $(document).on('click', ".edit_header", function() {
     var $this = $(this);
@@ -497,7 +485,8 @@
       "name": "trn_prod_plan_header[schedule][0][sfg_code]",
       "style": "width:135px",
       "autocomplete":"off",
-      "required": "true" 
+      "required": "true",
+      "oninvalid":"this.setCustomValidity('Fill this by selecting valid TRT number')" 
     });
     td = tr.insertCell(tdEle);
     td.appendChild(ele);
