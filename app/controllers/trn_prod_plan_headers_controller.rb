@@ -17,10 +17,7 @@ class TrnProdPlanHeadersController < ApplicationController
     .joins("LEFT JOIN trt_msts trt ON trt.trt_code = ss.trt_code")
     .joins("FULL OUTER JOIN mst_bom_hdrs bh ON o.sfg_code = bh.sfg_code and o.alt_bom_no = bh.alt_bom_no")
     .where(["h.sfg_code is null and trn_prod_plan_masters.action_status = ?", "Active"])
-    .group("trn_prod_plan_masters.id, o.id, bh.id, trt.id, sssfg_code")
-
-    puts @prod_plan_masters_list.to_json
-
+    .group("trn_prod_plan_masters.id, o.id, bh.id, trt.id, sssfg_code") 
   end
 
   # GET /prod_plan_headers/1
