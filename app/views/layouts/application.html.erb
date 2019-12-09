@@ -6,8 +6,7 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %> 
-    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= stylesheet_link_tag '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/cupertino/jquery-ui.min.css' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %> 
  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %> 
 
     
@@ -77,11 +76,15 @@
 
   </body>
   <script type="text/javascript">
-    $(document).on("keydown paste", ".readonly", function(e) { 
-        e.preventDefault();
+    $(document).on("keydown paste", ".readonly", function(e) {  
+    var code = e.keyCode || e.which;
+    if (code != 9) { 
+        e.preventDefault();}
     });
-    $(document).on("keydown paste", ".auto-form-control", function(e) {
-    if(e.which != 13 && e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40) {
+
+    $(document).on("keydown paste", ".auto-form-control", function(e) { 
+    var code = e.keyCode || e.which;  
+    if(code != 9 && code != 13 && code != 37 && code != 38 && code != 39 && code != 40) {
       $("#sfgCode").val('');
       $("#sfgDesc").val('');
     } 

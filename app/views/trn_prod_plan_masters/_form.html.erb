@@ -69,7 +69,7 @@
   </div>  
   <%= button_tag 'Add', onclick: "addRowMaster()", type: 'button', :class => "btn btn-primary"%> 
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%> 
-  <%= button_tag 'Submit', id:"btnSubmit", type: 'submit', :class => "btn btn-primary", data: { disable_with: "Submitting..."}
+  <%= button_tag 'Submit', id:"btnSubmit", :onclick => "return validation()", type: 'submit', :class => "btn btn-primary", data: { disable_with: "Submitting..."}
 %>   
 
   <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>   
@@ -96,6 +96,7 @@
     if (dayReqBatch == null || kanbanSize == null || frequencyDay == null) {
       return false;
     }
+    calculation();
     return true;
 
   }
