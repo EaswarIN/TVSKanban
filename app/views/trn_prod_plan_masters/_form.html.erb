@@ -1,4 +1,4 @@
-<%= form_with(model: trn_prod_plan_master, remote: true) do |f| %>
+<%= form_with(model: trn_prod_plan_master, id: "form_master", remote: true) do |f| %>
   <div class="form-row"> 
     <%= f.hidden_field :plant,:value => "1080", :required => true, class: 'form-control form-control-sm'%>
     <div class="col-md-2 mb-2"> 
@@ -69,7 +69,8 @@
   </div>  
   <%= button_tag 'Add', onclick: "addRowMaster()", type: 'button', :class => "btn btn-primary"%> 
   <%= button_tag 'Clear', type: 'reset', :class => "btn btn-secondary"%> 
-  <%= button_tag 'Submit', id:"btnSubmit", onclick: "return validation()", type: 'submit', :class => "btn btn-primary"%>   
+  <%= button_tag 'Submit', id:"btnSubmit", type: 'submit', :class => "btn btn-primary", data: { disable_with: "Submitting..."}
+%>   
 
   <%= button_tag 'Cancel', type: 'button', :class => "btn btn-secondary removeRow"%>   
 
@@ -86,6 +87,7 @@
   <% end %> 
 <% end %>   
 <script type="text/javascript">  
+  
   function validation() {  
     var dayReqBatch = document.getElementById('dayReqBatch');
     var kanbanSize = document.getElementById('kanbanSize');
