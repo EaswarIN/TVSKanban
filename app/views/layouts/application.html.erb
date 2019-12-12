@@ -76,14 +76,15 @@
 
   </body>
   <script type="text/javascript">
-    $(document).on("keydown paste", ".readonly", function(e) {  
-    var code = e.keyCode || e.which;
-    if (code != 9) { 
-        e.preventDefault();}
+    $(document).on("keydown paste", ".readonly", function(e) { 
+        var code = e.keyCode || e.which;
+        if (code != 9) { 
+          e.preventDefault();
+        }
     });
 
-    $(document).on("keydown paste", ".auto-form-control", function(e) { 
-    var code = e.keyCode || e.which;  
+    $(document).on("keydown paste", ".auto-form-control", function(e) {
+    var code = e.keyCode || e.which; 
     if(code != 9 && code != 13 && code != 37 && code != 38 && code != 39 && code != 40) {
       $("#sfgCode").val('');
       $("#sfgDesc").val('');

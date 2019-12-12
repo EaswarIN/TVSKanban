@@ -4,7 +4,7 @@
   <div class="col-md-2 mb-2"> 
     <label for="work_center">Machine #</label>
 
-    <%= f.text_field :work_center, :value => "MCH-1001",:required => true, class: 'form-control form-control-sm'%>  
+    <%= f.text_field :work_center, :value => "ACAL7201",:required => true, class: 'form-control form-control-sm'%>  
   </div>
   <div class="col-md-2 mb-2">
     <label for="uom">Uom</label>
@@ -17,7 +17,7 @@
   </div> 
   <div class="col-md-2 mb-2">
     <label for="Shift">Shift</label>
-    <select name="shift" class="form-control form-control-sm" style="width: 90px">
+    <select name="trn_prod_plan_header[shift]" class="form-control form-control-sm" style="width: 90px">
       <option value="1">1</option>
       <option value="2">2</option> 
       <option value="3">3</option> 
@@ -29,7 +29,8 @@
     <thead class="thead-light">
       <tr>
         <th scope="col" style="min-width: 100px">TRT No.</th>
-        <th scope="col" style="min-width: 100px">Part No.</th> 
+                <th scope="col" style="min-width: 100px">SFG Desc.</th> 
+<th scope="col" style="min-width: 100px">Part No.</th> 
         <th scope="col" class="text-right">Day Req. </th>
         <th scope="col" class="text-right">Lot Size</th> 
         <th scope="col" class="text-right">Sfty Stk</th>
@@ -39,7 +40,6 @@
         <th scope="col" class="text-right">Bom Type</th>
         <th scope="col" class="text-right">PO Type</th> 
         <th scope="col" class="text-right">PO No.</th>
-        <th scope="col" class="text-right">Sche. No.</th>
         <th scope="col" colspan="3">Sch. Stat.</th> 
       </tr>
     </thead>
@@ -51,7 +51,8 @@
         <td class=" align-middle" id="plan_header_trt_code">
           <%= p.trt_code %>
         </td> 
-        <td class="align-middle" id="plan_header_sfg_code"><%= p.sfg_code %></td>  
+                <td class="align-middle"><%= p.sfg_desc %></td>  
+<td class="align-middle" id="plan_header_sfg_code"><%= p.sfg_code %></td>  
         <td class="text-right align-middle"><%= p.day_req_qty_m2 %></td> 
         <td class="text-right align-middle"><%
         lot_size = 0
@@ -66,13 +67,10 @@
         <td class="text-right align-middle" id="plan_header_prod_qty"><%= p.sfg_plan_qty %></td> 
         <td class="text-right align-middle" id="plan_header_seq"><%= p.sfg_sequence %></td> 
         <td class="align-middle"><%= p.bom_type %></td> 
-        <td class="text-right align-middle"><%= p.po_type %> 
-        <td class="text-right align-middle" id="plan_header_po"><%= p.sap_plan_order %>
-        <td class="text-right align-middle"><%= p.schedule_no %>
-    <td class=" align-middle"><%= p.schedule_status %>  
-
-          </td> 
-          <td class=" align-middle"> 
+        <td class="text-right align-middle"><%= p.po_type %></td> 
+        <td class="text-right align-middle" id="plan_header_po"><%= p.sap_plan_order %></td>
+        <td class=" align-middle"><%= p.schedule_status %>  </td> 
+        <td class=" align-middle"> 
       <span class="float-right">
         <i class="fas fa-edit edit_header" style=" cursor: pointer;color: #007bff" data-toggle="modal" data-target="#edit_header" ></i>
 
@@ -95,13 +93,17 @@
  
 
       </td>   
-
+<td class=" align-middle"> 
+        <%= p.sfg_desc %>  
+  <%= f.hidden_field :sfg_desc, :value => p.sfg_desc,  name: "trn_prod_plan_header[schedule][#{p.id}][sfg_desc]"%> 
+      </td> 
        <td class=" align-middle"> 
         <%= p.sfg_code %> 
-  <%= f.hidden_field :sfg_code, :value => p.sfg_code, name: "trn_prod_plan_header[schedule][#{p.id}][sfg_code]"%> 
+  <%= f.hidden_field :sfg_code, :value => p.sfg_code, name: "trn_prod_plan_header[schedule][#{p.id}][sfg_code]"%>  
+      </td> 
 
-  <%= f.hidden_field :sfg_desc, :value => p.sfg_desc,  name: "trn_prod_plan_header[schedule][#{p.id}][sfg_desc]"%> 
-      </td>  
+
+        
 
       <td class="text-right align-middle"><%= p.day_req_batch %>
   <%= f.hidden_field :day_req_qty_m2, :value => p.day_req_batch,  name: "trn_prod_plan_header[schedule][#{p.id}][day_req_qty_m2]"%> 
@@ -136,9 +138,14 @@
             if !p.safety_stock.blank?
               safety_stock = p.safety_stock  
             end
+
+            kanban_size = 0
+            if !p.kanban_size.blank?
+              kanban_size = p.kanban_size  
+            end
             
             plan_qty = 0
-            plan_qty = lot_size + safety_stock - stock_qty 
+            plan_qty = ((lot_size + safety_stock - stock_qty) / kanban_size).to_i
 
             if plan_qty < 0
               plan_qty = 0
@@ -169,13 +176,9 @@
           <td class="text-right align-middle">
             <%=p.sap_plan_order%>
             <%= if (!p.sap_plan_order.blank?) 
-              f.hidden_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]" 
-            else
-              f.text_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]", class: 'form-control form-control-sm text-right w120 readonly', :required => true,"oninvalid" => "this.setCustomValidity('Cannot save empty PO No.');","oninput" => "this.setCustomValidity('');"
+              f.hidden_field :sap_plan_order, :value => p.sap_plan_order,  name: "trn_prod_plan_header[schedule][#{p.id}][sap_plan_order]"  
             end %> 
-          </td> 
-
-          <td class="text-right align-middle"><%= f.text_field :schedule_no, :type => "number",  class: 'form-control form-control-sm text-right w80', name: "trn_prod_plan_header[schedule][#{p.id}][schedule_no]", :required => true, :min=>0%> </td>  
+          </td>  
           <td class=" align-middle" colspan="3">
             Plan
             <%= f.hidden_field :schedule_status, :value => 'Plan',  name: "trn_prod_plan_header[schedule][#{p.id}][schedule_status]"   %>  
@@ -341,17 +344,6 @@
     td.appendChild(eleSelect);
     var ele = document.createElement('input');
     setAttributes(ele, {
-      "id": "schedule_no",
-      "type": "number",
-      "value": "0",
-      "class": "form-control form-control-sm text-right w80",
-      "name": "trn_prod_plan_header[schedule][0][schedule_no]",
-      "min": "0"
-    });
-    td = tr.insertCell(tdEle);
-    td.appendChild(ele);
-    var ele = document.createElement('input');
-    setAttributes(ele, {
       "id": "sap_plan_order",
       "class": "form-control form-control-sm text-right w120 ",
       "name": "trn_prod_plan_header[schedule][0][sap_plan_order]",
@@ -468,15 +460,7 @@
       "min": "0"
     });
     td = tr.insertCell(tdEle);
-    td.appendChild(ele);
-    ele = document.createElement('input');
-    setAttributes(ele, {
-      "type": "hidden",
-      "id": "sfgDesc",
-      "class": " form-control form-control-sm",
-      "name": "trn_prod_plan_header[schedule][0][sfg_desc]"
-    });
-    td.appendChild(ele);
+    td.appendChild(ele); 
     ele = document.createElement('input');
     setAttributes(ele, {
       "id": "sfgCode",
@@ -487,6 +471,17 @@
       "autocomplete":"off",
       "required": "true",
       "oninvalid":"this.setCustomValidity('Fill this by selecting valid TRT number')" 
+    });
+    td = tr.insertCell(tdEle);
+    td.appendChild(ele);
+    ele = document.createElement('input');
+    setAttributes(ele, {
+      "id": "sfgDesc",
+      "value": "",
+      "class": " form-control form-control-sm readonly",
+      "name": "trn_prod_plan_header[schedule][0][sfg_desc]",
+      "style": "width:210px",
+      "autocomplete":"off", 
     });
     td = tr.insertCell(tdEle);
     td.appendChild(ele);
